@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 //@RequestMapping("/api")
 public class HelloController {
 
-    @GetMapping("/api/hello")
-    public String Hello() {
-        return "Hello, React + Spring";
-    }
+
+//    @GetMapping("/gathering/list")
+//    public String gatheringList() {
+//
+//    }
 }
