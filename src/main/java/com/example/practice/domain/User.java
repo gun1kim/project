@@ -1,5 +1,6 @@
 package com.example.practice.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -34,15 +35,21 @@ public class User {
     @Column(length = 200)
     private String address;
 
-    @Column(nullable = false, columnDefinition = "false")
+    @Column(nullable = false, columnDefinition = "TINYINT default 0")
     private boolean isAdmin;
 
     private String profile;
 
-    @Column(nullable = false, columnDefinition = "Timestamp default CURRENT_TIMESTAMP")
+//    @Column(nullable = false, columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
+    @Column(nullable = false)
     private Timestamp createAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<UserGathering> userGatherings = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        this.createAt = new Timestamp(System.currentTimeMillis());
+    }
 }

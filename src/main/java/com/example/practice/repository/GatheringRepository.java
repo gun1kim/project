@@ -11,5 +11,5 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
 
     List<Gathering> findAllByStatusEquals(boolean status);
 
-//    void joinGathering(Long id);
+
 }

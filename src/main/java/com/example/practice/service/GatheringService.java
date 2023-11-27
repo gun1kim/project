@@ -14,36 +14,36 @@ public class GatheringService {
 
     private final GatheringRepository gatheringRepository;
 
-    public List<Gathering> findAll() {
+    public List<Gathering> getAllGatherings() {
         return gatheringRepository.findAll();
     }
 
-    public Gathering findGatheringById(Long id) {
+    public Gathering getGatheringById(Long id) {
         return gatheringRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("no such data"));
     }
 
-    public List<Gathering> findAllByStatus(boolean status) {
+    public List<Gathering> getAllByStatus(boolean status) {
         return gatheringRepository.findAllByStatusEquals(status);
     }
 
-    public void createGathering(String title, String content, int capacity) {
-        gatheringRepository.save(new Gathering(title, content, capacity));
+//    public void createGathering(String title, String content, int capacity) {
+//        gatheringRepository.save(new Gathering(title, content, capacity));
+//    }
+    public void createGathering(Gathering gathering) {
+        gatheringRepository.save(gathering);
     }
 
-    public void updateGathering(String title, String content, int capacity) {
-
+    public void updateGathering(Long id, String title, String content, int capacity) {
+        Gathering gathering = gatheringRepository.findById(id).get();
+        gathering.setTitle(title);
+        gathering.setContent(content);
+        gathering.setCapacity(capacity);
+        gatheringRepository.save(gathering);
     }
 
     public void deleteById(Long id) {
         gatheringRepository.deleteById(id);
     }
 
-//    public void joinGathering(Long id) {
-//        Gathering gathering = gatheringRepository.findById(id).get();
-//        if (gathering.getCount() < gathering.getCapacity()) {
-//            gathering.setCount(gathering.getCount() + 1);
-//        }
-//        gatheringRepository.joinGathering(id);
-//    }
 
 }

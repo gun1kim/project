@@ -17,7 +17,6 @@
     position: relative;
     align-self: stretch;
     width: 100%;
-    overflow: hidden;
 }
 
 .screen .view {
@@ -341,8 +340,8 @@
 }
 
 .screen .line {
-    position: relative;
     width: 1448px;
+    position: relative;
     height: 9px;
     object-fit: cover;
 }
@@ -629,11 +628,22 @@
 }
 
 .screen .element-2 {
+    font-family: "Poppins-Medium", Helvetica;
+    font-weight: 500;
     color: var(--white);
     position: relative;
     width: fit-content;
-    font-family: "Poppins-Medium", Helvetica;
-    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: normal;
+}
+
+.screen .element-3 {
+    font-family: "Poppins-Bold", Helvetica;
+    font-weight: 700;
+    color: var(--neutral-800);
+    position: relative;
+    width: fit-content;
     font-size: 14px;
     letter-spacing: 0;
     line-height: normal;
@@ -682,15 +692,33 @@
 }
 
 .screen .footer-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     position: relative;
-    width: 1440px;
-    height: 279px;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
 }
 
 .screen .footer {
     position: relative;
-    height: 279px;
+    align-self: stretch;
+    width: 100%;
+    height: 251px;
     background-color: #ffffff;
+}
+
+.screen .button-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    position: absolute;
+    top: 108px;
+    left: 1172px;
 }
 
 .screen .button {
@@ -701,9 +729,7 @@
     justify-content: center;
     gap: 10px;
     padding: 5px 26px;
-    position: absolute;
-    top: 118px;
-    left: 1182px;
+    position: relative;
     background-color: var(--colorsbluedark);
     border-radius: 15px;
     all: unset;
@@ -723,13 +749,31 @@
     white-space: nowrap;
 }
 
+.screen .overlap-group-3 {
+    position: absolute;
+    width: 567px;
+    height: 120px;
+    top: 80px;
+    left: 425px;
+}
+
+.screen .menu-header-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    position: absolute;
+    top: 44px;
+    left: 0;
+}
+
 .screen .menu-header {
     display: inline-flex;
     align-items: flex-start;
     gap: 40px;
-    position: absolute;
-    top: 134px;
-    left: 435px;
+    position: relative;
+    flex: 0 0 auto;
 }
 
 .screen .text-wrapper-16 {
@@ -745,27 +789,47 @@
     white-space: nowrap;
 }
 
-.screen .image {
+.screen .frame-11 {
     position: absolute;
+    width: 120px;
+    height: 120px;
+    top: 0;
+    left: 75px;
+}
+
+.screen .image-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    position: absolute;
+    top: 89px;
+    left: 57px;
+}
+
+.screen .image {
+    position: relative;
     width: 189px;
     height: 69px;
-    top: 99px;
-    left: 67px;
     object-fit: cover;
 }
 
-.screen .rectangle {
+.screen .frame-12 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
     position: absolute;
-    width: 100px;
-    height: 100px;
-    top: -2418px;
-    left: -7827px;
+    top: 120px;
+    left: 1043px;
 }
 
 .screen .text-wrapper-17 {
-    position: absolute;
-    top: 129px;
-    left: 1053px;
+    position: relative;
+    width: fit-content;
+    margin-top: -1px;
     font-family: "Roboto-Regular", Helvetica;
     font-weight: 400;
     color: #000000;
@@ -776,11 +840,23 @@
     line-height: normal;
 }
 
-.screen .line-2 {
+.screen .line-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
     position: absolute;
-    top: 31px;
-    left: -4px;
-    width: 1448px;
+    top: 26px;
+    left: -10px;
+}
+
+.screen .line-2 {
+    width: 1444px;
+    margin-top: -5px;
+    margin-bottom: -4px;
+    margin-right: -4px;
+    position: relative;
     height: 9px;
     object-fit: cover;
 }
