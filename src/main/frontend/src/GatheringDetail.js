@@ -12,115 +12,51 @@ function GatheringDetail() {
     let gatheringId = params.gatheringId;
 
     return (
-        <div className="index">
+        <div className="detail-index">
             <div className="div">
-                <div className="div">
-                    <header className="header">
-                        <div className="header-logo-wrap">
-                            <div className="header-logo" />
+                <div className="footer-wrap">
+                    <div className="footer-logo-wrap">
+                        <div className="footer-image-wrap" />
+                    </div>
+                    <div className="footer-menu-wrap">
+                        <div className="div-wrapper">
+                            <div className="text-wrapper">이용안내</div>
                         </div>
-                        <img
-                            className="header-profile-icon"
-                            alt="Header profile icon"
-                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/header-profile-icon-wrap.svg"
-                        />
-                        <div className="header-mission-wrap">
-                            <div className="text-wrapper">봉사미션</div>
+                        <div className="div-wrapper">
+                            <div className="text-wrapper">공지사항</div>
                         </div>
-                        <div className="header-gathering">
-                            <div className="text-wrapper">봉사모임</div>
+                        <div className="div-wrapper">
+                            <div className="text-wrapper">Q&amp;A</div>
                         </div>
-                        <div className="header-funding-wrap">
-                            <div className="text-wrapper">펀딩</div>
+                        <div className="div-wrapper">
+                            <div className="text-wrapper">이용약관</div>
                         </div>
-                        <div className="header-support-wrap">
-                            <div className="text-wrapper">고객지원</div>
+                        <div className="footer-privacy-wrap">
+                            <p className="footer-privacy">개인정보 수집 및 이용 동의</p>
                         </div>
-                        <img
-                            className="header-message-icon"
-                            alt="Header message icon"
-                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/header-message-icon-wrap.svg"
-                        />
-                        <img
-                            className="header-noti-icon"
-                            alt="Header noti icon"
-                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/header-noti-icon-wrap.svg"
-                        />
-                    </header>
-                    <div className="element">
-                        <div className="overlap-group">
+                    </div>
+                    <div className="footer-inquiry-wrap">
+                        <div className="footer-inquiry">문의하기</div>
+                    </div>
+                    <div className="footer-button-wrap">
+                        <div className="footer-button">
+                            <div className="footer-button-text">바로가기</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="overlap-group">
+                    <div className="detail-main-wrap">
+                        <div className="detail-main">
                             <img
-                                className="icon-leaf"
-                                alt="Icon leaf"
-                                src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/---icon--leaf-@2x.png"
+                                className="nature"
+                                alt="Nature"
+                                src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/nature-3289812-1920-2.png"
                             />
-                        </div>
-                        <div className="ECO-CONNECT">
-                            ECO
-                            <br />
-                            CONNECT
-                        </div>
-                    </div>
-                </div>
-                <div className="div">
-                    <div className="div-2">
-                        <div className="div-2">
-                            <div className="gathering-join-image">
-                                <img
-                                    className="img"
-                                    alt="Gathering join image"
-                                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/gathering-join-image.png"
-                                />
+                            <div className="detail-main-writer">
+                                <div className="detail-writer">익명의 서포터</div>
+                                <div className="detail-title">오리역 봉사모임!!</div>
                             </div>
-                            <div className="gathering-join">
-                                <div className="overlap-group-2">
-                                    <p className="gathering-join-text">
-                                        소규모 모임부터 봉사 모임까지 주변 사람들과 모여서 봉사활동을 시작하세요!
-                                    </p>
-                                    <div className="gathering-join-cover" />
-                                    <div className="gathering-join-text-2">모임에 참석해보세요</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="gathreing-detail">
-                    <div className="gathering-detail">오리역 봉사모임!!</div>
-                    <img
-                        className="gathering-detail-2"
-                        alt="Gathering detail"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/gathering-detail-border.svg"
-                    />
-                </div>
-                <div className="gathering-detail-3">
-                    <div className="gathering-detail-wrapper">
-                        <div className="gathering-detail-4">
-                            <div className="img-wrapper">
-                                <img
-                                    className="gathering-detail-5"
-                                    alt="Gathering detail"
-                                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/gathering-detail-background.png"
-                                />
-                            </div>
-                            <div className="gathering-detail-6">
-                                <div className="gathering-detail-7" />
-                                <img
-                                    className="gathering-detail-8"
-                                    alt="Gathering detail"
-                                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/gathering-detail-writer-profile@2x.png"
-                                />
-                                <div className="div-wrapper">
-                                    <div className="gathering-detail-9">익명의 모임장</div>
-                                </div>
-                            </div>
-                            <div className="rectangle-wrapper">
-                                <div className="rectangle" />
-                            </div>
-                            <div className="frame" />
-                            <div className="gathering-detail-10">
-                                <div className="gathering-detail-11">오리역 봉사모임!!</div>
-                            </div>
-                            <div className="gathering-detail-12">
+                            <div className="detail-main-content">
                                 <p className="p">
                                     🙋호스트를 소개해요!
                                     <br /> -안녕하세요, 책을 통해 발전하고싶은 성장에 미쳐있는 옐리입니다.
@@ -138,126 +74,112 @@ function GatheringDetail() {
                                     <br /> - 참가비는 장소대관비, 모임운영비로 사용됩니다
                                 </p>
                             </div>
-                            <div className="gathering-detail-13">
+                            <div className="detail-main-sum-wrap">
                                 <div className="text-wrapper-2">멤버소개</div>
+                                <div className="detail-main-hello">우리 반갑게 만나요</div>
+                                <div className="detail-main-gather">익명의 모임장</div>
+                                <p className="detail-main-gather-2">선한영향력을 가진 사람이 되고 싶어요.</p>
                             </div>
-                            <div className="gathering-detail-14">
-                                <div className="gathering-detail-11">우리 반갑게 만나요</div>
-                            </div>
-                            <div className="gathering-detail-15">
-                                <div className="gathering-detail-16">익명의 모임장</div>
-                            </div>
-                            <div className="gathering-detail-17">
-                                <p className="gathering-detail-18">선한영향력을 가진 사람이 되고 싶어요.</p>
-                            </div>
-                            <div className="gathering-detail-19">
-                                <div className="rectangle-2" />
+                            <div className="detail-main-check">
                                 <img
-                                    className="gathering-preview"
-                                    alt="Gathering preview"
-                                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/gathering-preview-plus-wrap.svg"
+                                    className="img"
+                                    alt="Detail main check"
+                                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/detail-main-check-plus.svg"
                                 />
-                                <div className="gathering-preview-wrapper">
-                                    <p className="gathering-preview-2">함께 할 멤버들을 먼저 확인하고 참여해 보세요!</p>
-                                </div>
-                                <div className="gathering-preivew">
-                                    <div className="gathering-preview-3">
-                                        <div className="text-wrapper-3">확인하기</div>
-                                    </div>
+                                <p className="detail-main-check-2">함께 할 멤버들을 먼저 확인하고 참여해 보세요!</p>
+                                <div className="detail-main-check-wrapper">
+                                    <div className="detail-main-check-3">확인하기</div>
                                 </div>
                             </div>
-                            <div className="gathering-gather">
-                                <div className="gathering-gather-wrapper">
-                                    <div className="text-wrapper-2">안내사항</div>
-                                </div>
-                                <div className="gathering-gather-wrapper">
-                                    <div className="gathering-gather-2">자세한 정보를 알려드릴게요</div>
-                                </div>
-                                <div className="gathering-gather-num">
-                                    <div className="gathering-gather-num-wrapper">
-                                        <div className="text-wrapper-3">20명</div>
-                                    </div>
-                                    <div className="gathering-gather-pos">
-                                        <img
-                                            className="gathering-gather-pos-2"
-                                            alt="Gathering gather pos"
-                                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/gathering-gather-pos-icon.svg"
-                                        />
-                                        <div className="text-wrapper-3">오리역</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="gathering-gather-3">
-                                <div className="overlap-group-wrapper">
-
-                                    <div className="overlap-group-3">
-                                        <button className="gathering-gather-4" onClick={async () => {
-                                            try {
-                                                const response = await axios.delete(`http://localhost:8080/api/gathering/${gatheringId}`)
-                                                console.log(response.data);
-                                            } catch(error) {
-                                                console.log(error);
-                                            }
-                                        }}>삭제</button>
-                                    </div>
-                                </div>
-                                <div className="overlap-wrapper">
-                                    <div className="overlap">
-                                        <button type="button" className="gathering-gather-5">수정</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="gathering-join-wrap">
-                        <button type="button" className="gathering-join-text-3">바로 참여 하기</button>
-                    </div>
-                </div>
-                <div className="div">
-                    <footer className="footer">
-                        <div className="footer-content-wrap">
-                            <div className="div-3">
-                                <div className="div-3">
-                                    <div className="ellipse" />
-                                    <div className="ECO-CONNECT-2">
-                                        ECO
-                                        <br />
-                                        CONNECT
-                                    </div>
+                            <div className="detail-main-info">
+                                <div className="text-wrapper-2">안내사항</div>
+                                <div className="detail-main-details">자세한 정보를 알려드릴게요</div>
+                                <div className="detail-people-wrap">
                                     <img
-                                        className="icon-leaf-2"
-                                        alt="Icon leaf"
-                                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656592b669fa33efc3822335/img/---icon--leaf--1@2x.png"
+                                        className="img-2"
+                                        alt="Detail people icon"
+                                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/detail-people-icon.svg"
                                     />
+                                    <div className="detail-people-text">20명</div>
+                                </div>
+                                <div className="detail-location-wrap">
+                                    <img
+                                        className="img-2"
+                                        alt="Detail locaion icon"
+                                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/detail-locaion-icon.svg"
+                                    />
+                                    <div className="detail-location-text">오리역</div>
+                                    <div className="detail-blank" />
+                                    <div className="detail-buttons">
+                                        <div className="detail-update-button">
+                                            <div className="text-wrapper-3">수정</div>
+                                        </div>
+                                        <div className="detail-delete-button">
+                                            <div className="text-wrapper-3">삭제</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="footer-menu-wrap">
-                                <div className="div-wrapper-2">
-                                    <div className="text-wrapper-4">이용안내</div>
-                                </div>
-                                <div className="div-wrapper-2">
-                                    <div className="text-wrapper-4">공지사항</div>
-                                </div>
-                                <div className="div-wrapper-2">
-                                    <div className="text-wrapper-4">Q&amp;A</div>
-                                </div>
-                                <div className="div-wrapper-2">
-                                    <div className="text-wrapper-4">이용약관</div>
-                                </div>
-                                <div className="footer-privacy-wrap">
-                                    <p className="text-wrapper-4">개인정보 수집 및 이용 동의</p>
-                                </div>
-                            </div>
-                            <div className="footer-right-wrap">
-                                <div className="footer-inquiry-wrap">
-                                    <div className="footer-inquiry">문의하기</div>
-                                </div>
-                                <div className="footer-button-wrap">
-                                    <div className="footer-button-text">바로가기</div>
-                                </div>
+                            <div className="detail-join-button">
+                                <div className="detail-join-text">바로 참여 하기</div>
                             </div>
                         </div>
-                    </footer>
+                    </div>
+                    <img
+                        className="profile-icon"
+                        alt="Profile icon"
+                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/profile-icon.svg"
+                    />
+                </div>
+                <div className="gathering-title">
+                    <div className="title">오리역 봉사모임!</div>
+                </div>
+                <div className="gathering-banner">
+                    <img
+                        className="nature-2"
+                        alt="Nature"
+                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/nature-3289812-1920-2-1.png"
+                    />
+                    <div className="banner-text-big">모임에 참석해 보세요!</div>
+                    <p className="banner-text-small">소규모 모임부터 봉사 모임까지 주변 사람들과 모여서 봉사활동을 시작하세요!</p>
+                </div>
+                <div className="header-wrap">
+                    <header className="header">
+                        <div className="header-logo-wrap">
+                            <div className="logo-wrap">
+                                <div className="ellipse" />
+                                <div className="ECO-CONNECT">
+                                    ECO
+                                    <br />
+                                    CONNECT
+                                </div>
+                                <img
+                                    className="icon-leaf"
+                                    alt="Icon leaf"
+                                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/---icon--leaf-@2x.png"
+                                />
+                            </div>
+                        </div>
+                        <div className="header-menu-wrap">
+                            <div className="header-mission-wrap">
+                                <div className="text-wrapper-4">봉사미션</div>
+                            </div>
+                            <div className="div-wrapper-2">
+                                <div className="text-wrapper-4">봉사모임</div>
+                            </div>
+                            <div className="div-wrapper-2">
+                                <div className="text-wrapper-4">펀딩</div>
+                            </div>
+                            <div className="div-wrapper-2">
+                                <div className="text-wrapper-4">고객지원</div>
+                            </div>
+                        </div>
+                        <img
+                            className="header-icon-wrap"
+                            alt="Header icon wrap"
+                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/header-icon-wrap.svg"
+                        />
+                    </header>
                 </div>
             </div>
         </div>
