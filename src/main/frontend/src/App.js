@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { BrowserRouter, Routes, Route }  from "react-router-dom";
 import axios from 'axios';
 import GatheringList from "./GatheringList";
+import GatheringDetail from "./GatheringDetail";
 
 function App() {
   // const [hello, setHello] = useState('')
@@ -16,6 +17,7 @@ function App() {
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<GatheringList />}></Route>
+              <Route path="/:gatheringId" element={<GatheringDetail />}></Route>
           </Routes>
       </BrowserRouter>
       // <div>

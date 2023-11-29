@@ -1,16 +1,21 @@
 package com.example.practice.controller;
 
 import com.example.practice.domain.Gathering;
+import com.example.practice.domain.User;
+import com.example.practice.domain.UserGathering;
 import com.example.practice.service.GatheringService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Slf4j
 public class GatherController {
 
     private final GatheringService gatheringService;
@@ -41,5 +46,23 @@ public class GatherController {
     @PostMapping("/gathering")
     public void addGathering(@RequestBody Gathering gathering) {
         gatheringService.createGathering(gathering);
+
+    }
+
+    @GetMapping("/gathering/{gatheringId}/users")
+    public List<User> getGatheringUsers(@PathVariable Long gatheringId) {
+        Gathering gathering = gatheringService.getGatheringById(gatheringId);
+        List<UserGathering> userGatherings = gathering.getUserGatherings();
+
+        List<User> users = userGatherings.stream()
+                .map(UserGathering::getUser)
+                .collect(Collectors.toList());
+        log.info("users = {}", users);
+        return users;
+    }
+
+    @DeleteMapping("/gathering/{gatheringId}")
+    public void removeGathering(@PathVariable Long gatheringId) {
+        gatheringService.deleteById(gatheringId);
     }
 }

@@ -13,7 +13,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@ToString(exclude = "userGatherings")
 public class User {
 
     @Id
@@ -45,7 +47,7 @@ public class User {
     private Timestamp createAt;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("user_gatherings")
     private List<UserGathering> userGatherings = new ArrayList<>();
 
     @PrePersist

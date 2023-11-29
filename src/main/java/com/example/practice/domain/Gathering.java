@@ -4,15 +4,18 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "userGatherings")
 public class Gathering {
 
     @Id
@@ -32,12 +35,12 @@ public class Gathering {
 
     private int capacity;
 
-//    @Column(nullable = false, columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
     @Column(nullable = false)
+    @CreatedDate
     private Timestamp createAt;
 
     @OneToMany(mappedBy = "gathering", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("gathering_gatherings")
     private List<UserGathering> userGatherings = new ArrayList<>();
 
     public Gathering(String title, String content, int capacity) {

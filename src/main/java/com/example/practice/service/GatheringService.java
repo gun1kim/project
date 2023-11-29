@@ -26,9 +26,7 @@ public class GatheringService {
         return gatheringRepository.findAllByStatusEquals(status);
     }
 
-//    public void createGathering(String title, String content, int capacity) {
-//        gatheringRepository.save(new Gathering(title, content, capacity));
-//    }
+
     public void createGathering(Gathering gathering) {
         gatheringRepository.save(gathering);
     }

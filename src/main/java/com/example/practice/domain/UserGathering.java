@@ -18,12 +18,13 @@ public class UserGathering {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonBackReference("user_gatherings")
+
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gathering_id")
-    @JsonBackReference
+    @JsonBackReference("gathering_gatherings")
     private Gathering gathering;
 
     public void UserGathering(User user, Gathering gathering) {

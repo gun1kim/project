@@ -28,6 +28,10 @@ public class UserGatheringService {
             log.info("모임 정원 초과");
             throw new Exception("모임 정원 초과");
         }
+        else if (gathering.isStatus() == true) {
+            log.info("마감된 모임입니다.");
+            throw new Exception("마감된 모임");
+        }
         gathering.setCount(gathering.getCount() + 1);
         gatheringRepository.save(gathering);
         UserGathering userGathering = new UserGathering();
