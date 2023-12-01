@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
@@ -22,10 +23,24 @@ public class Gathering {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gatheringId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id")
+    private User creatorId;
+
     @Column(length = 50, nullable = false)
     private String title;
 
-    private String content;
+    @Column
+    private String intro;
+
+    @Column
+    private String etc;
+
+    @Column
+    private String location;
+
+    @Column
+    private String image;
 
     @Column(columnDefinition = "TINYINT default 0")
     private boolean status;
@@ -43,11 +58,14 @@ public class Gathering {
     @JsonManagedReference("gathering_gatherings")
     private List<UserGathering> userGatherings = new ArrayList<>();
 
-    public Gathering(String title, String content, int capacity) {
-        this.title = title;
-        this.content = content;
-        this.capacity = capacity;
-    }
+//    public Gathering(String title, String intro, String etc, String location, String image, int capacity) {
+//        this.title = title;
+//        this.intro = intro;
+//        this.etc = etc;
+//        this.location = location;
+//        this.image = image;
+//        this.capacity = capacity;
+//    }
 
     @PrePersist
     public void prePersist() {

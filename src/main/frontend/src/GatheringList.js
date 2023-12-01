@@ -2,29 +2,30 @@ import React from "react";
 import "./GatheringList.css";
 import {useState, useEffect} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 function GatheringList() {
 
     const [lists, setLists] = useState([]);
     const [show, setShow] = useState([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/gathering');
+
+    const fetchData = () => {
+        axios.get('http://localhost:8080/api/gathering')
+            .then((response) => {
                 setLists(response.data);
-                console.log(response.data);
-            } catch (error) {
-                console.error('Error fetching data from API:', error);
-            }
-        }
+            })
+            .catch((error) => {
+                console.log('Error fetching data from API: ' , error);
+            });
+    };
+
+    useEffect(() => {
         fetchData();
     }, []);
 
     useEffect(() => {
         console.log(lists);
-
     }, [lists])
-
 
     return (
         <div className="gathering-index">
@@ -128,15 +129,12 @@ function GatheringList() {
                 {lists.map((item, index) => (
                     <div className="gathering-list">
                         <div className="gathering-list-2">
-                            <div className="gathering-list-image" />
+                            <Link to={`/${item.gatheringId}`}><div className="gathering-list-image" style={{ backgroundImage: `url(http://localhost:8080/files/${item.image})` }} /></Link>
                             <div className="gathering-list-info">
                                 <div className="gathering-list-title">
-                                    <div className="gathering-list-title-2">{item.title}</div>
+                                    <Link to={`/${item.gatheringId}`}><div className="gathering-list-title-2">{item.title}</div></Link>
                                 </div>
-                                <div className="gathering-list-sum">
-                                    {item.content}
-                                    {/*<div className="gathering-list-sum-2">{item.content}</div>*/}
-                                </div>
+                                <div className="gathering-list-sum">{item.intro}</div>
                                 <div className="gathering-list-3">
                                     <img
                                         className="gathering-list-4"
@@ -158,247 +156,7 @@ function GatheringList() {
                         </div>
                     </div>
                 ))}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*    <div className="gathering-list">*/}
-            {/*        <div className="gathering-list-2">*/}
-            {/*            <div className="gathering-list-image" />*/}
-            {/*            <div className="gathering-list-info">*/}
-            {/*                <div className="gathering-list-title">*/}
-            {/*                    <div className="gathering-list-title-2">오리역 봉사모임 입니다!</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-sum">*/}
-            {/*                    <div className="gathering-list-sum-2">단기모임 / 11.26(일) 하루만</div>*/}
-            {/*                </div>*/}
-            {/*                <div className="gathering-list-3">*/}
-            {/*                    <img*/}
-            {/*                        className="gathering-list-4"*/}
-            {/*                        alt="Gathering list"*/}
-            {/*                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/frame-427318306.svg"*/}
-            {/*                    />*/}
-            {/*                    <div className="gathering-list-5">*/}
-            {/*                        <img*/}
-            {/*                            className="gathering-list-6"*/}
-            {/*                            alt="Gathering list"*/}
-            {/*                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/group@2x.png"*/}
-            {/*                        />*/}
-            {/*                        <div className="gathering-list-7">*/}
-            {/*                            <div className="text-wrapper-3">14/20</div>*/}
-            {/*                        </div>*/}
-            {/*                    </div>*/}
-            {/*                </div>*/}
-            {/*            </div>*/}
-            {/*        </div>*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+        </div>
             <div className="gathering-list-8">
                 <div className="pagination-button">
                     <div className="pagination-left-wrap">
@@ -437,7 +195,7 @@ function GatheringList() {
                 </div>
                 <div className="register-button-wrap">
                     <div className="register-button">
-                        <div className="register-text">작성</div>
+                        <div className="register-text"><Link to="/add" className="register-button">작성</Link></div>
                     </div>
                 </div>
             </div>
@@ -471,7 +229,6 @@ function GatheringList() {
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     )
 }

@@ -1,10 +1,19 @@
 package com.example.practice.service;
 
 import com.example.practice.domain.Gathering;
+import com.example.practice.domain.User;
+import com.example.practice.dto.GatheringCreateDto;
+import com.example.practice.dto.GatheringUpdateDto;
+import com.example.practice.image.FileStore;
 import com.example.practice.repository.GatheringRepository;
+import com.example.practice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,14 +21,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GatheringService {
 
+
+
     private final GatheringRepository gatheringRepository;
 
     public List<Gathering> getAllGatherings() {
         return gatheringRepository.findAll();
     }
 
-    public Gathering getGatheringById(Long id) {
-        return gatheringRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("no such data"));
+    public Gathering getGatheringById(Long gatheringId) {
+
+        return gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such data"));
     }
 
     public List<Gathering> getAllByStatus(boolean status) {
@@ -27,21 +39,33 @@ public class GatheringService {
     }
 
 
-    public void createGathering(Gathering gathering) {
+    public void createGathering(GatheringCreateDto gatheringCreateDto) {
+        Gathering gathering = new Gathering();
+        gathering.setTitle(gatheringCreateDto.getTitle());
+        gathering.setIntro(gatheringCreateDto.getIntro());
+        gathering.setEtc(gatheringCreateDto.getEtc());
+        gathering.setLocation(gatheringCreateDto.getLocation());
+        gathering.setImage(gatheringCreateDto.getImage().getOriginalFilename());
+        gathering.setCapacity(gatheringCreateDto.getCapacity());
+
         gatheringRepository.save(gathering);
     }
 
-    public void updateGathering(Long id, String title, String content, int capacity) {
-        Gathering gathering = gatheringRepository.findById(id).get();
-        gathering.setTitle(title);
-        gathering.setContent(content);
-        gathering.setCapacity(capacity);
+    public void updateGathering(Long gatheringId, GatheringUpdateDto gatheringUpdateDto) {
+        Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such gathering"));
+
+        gathering.setTitle(gatheringUpdateDto.getTitle());
+        gathering.setIntro(gatheringUpdateDto.getIntro());
+        gathering.setEtc(gatheringUpdateDto.getEtc());
+        gathering.setImage(gatheringUpdateDto.getImage().getOriginalFilename());
+        gathering.setLocation(gatheringUpdateDto.getLocation());
+        gathering.setCapacity(gatheringUpdateDto.getCapacity());
+
         gatheringRepository.save(gathering);
     }
 
     public void deleteById(Long id) {
         gatheringRepository.deleteById(id);
     }
-
 
 }

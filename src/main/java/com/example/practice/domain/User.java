@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.annotation.processing.Generated;
 import java.sql.Timestamp;
@@ -49,6 +50,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference("user_gatherings")
     private List<UserGathering> userGatherings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creatorId", fetch = FetchType.LAZY)
+    private List<Gathering> gatherings = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

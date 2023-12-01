@@ -1,15 +1,50 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./Root.css";
 import "./GatheringDetail.css";
-import {Link} from "react-router-dom";
 import axios from "axios";
-import { useParams} from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 function GatheringDetail() {
 
     let params = useParams();
 
     let gatheringId = params.gatheringId;
+    const [gathering, setGathering] = useState();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async() => {
+            try {
+                const response = await axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+                setGathering(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData();
+    }, [])
+
+    useEffect(() => {
+
+    }, [gatheringId, gathering])
+
+
+    const deleted = axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+        .catch(error => console.log(error));
+    const deleteButton = async () => {
+        await axios.delete(`http://localhost:8080/api/gathering/${gatheringId}`)
+            .then((response) => {
+                console.log("delete success");
+                navigate('/');
+            })
+            .catch((error) => {
+                console.log("delete fail");
+                console.log(error);
+            })
+
+    };
+
+
 
     return (
         <div className="detail-index">
@@ -54,14 +89,15 @@ function GatheringDetail() {
                             />
                             <div className="detail-main-writer">
                                 <div className="detail-writer">익명의 서포터</div>
-                                <div className="detail-title">오리역 봉사모임!!</div>
+                                <div className="detail-title">{gathering ? gathering.title : "Loading..."}</div>
                             </div>
                             <div className="detail-main-content">
                                 <p className="p">
                                     🙋호스트를 소개해요!
-                                    <br /> -안녕하세요, 책을 통해 발전하고싶은 성장에 미쳐있는 옐리입니다.
+                                    <br /> -안녕하세요, 책을 통해 발전하고싶은 성장에 미쳐있는 옐리입니다. {gathering ? gathering.intro : "Loading..."}
                                     <br /> <br />
-                                    👟이런 활동을 할 거예요!
+                                    👟이런 활동을 할 거예요! <br />
+                                    {gathering ? gathering.etc : "Loading..."}
                                     <br /> - 혼자 읽을땐 눈치가 보여 선행을 선뜻하지 못했지만 함께라면 가능해요.
                                     <br /> - 선정한 봉사 소개와 선정이유-&gt;봉사-&gt;깨달은 것 나누기
                                     <br /> - 선행를 통해 모두가 1cm라도 성장하길 바랍니다.
@@ -92,36 +128,36 @@ function GatheringDetail() {
                                 </div>
                             </div>
                             <div className="detail-main-info">
-                                <div className="text-wrapper-2">안내사항</div>
+                                <div className="detail-info-text">안내사항</div>
                                 <div className="detail-main-details">자세한 정보를 알려드릴게요</div>
                                 <div className="detail-people-wrap">
                                     <img
-                                        className="img-2"
+                                        className="people-img"
                                         alt="Detail people icon"
                                         src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/detail-people-icon.svg"
                                     />
-                                    <div className="detail-people-text">20명</div>
+                                    <div className="detail-people-text">{gathering ? gathering.capacity + "명" : "Loading..."}</div>
                                 </div>
                                 <div className="detail-location-wrap">
                                     <img
-                                        className="img-2"
+                                        className="location-img"
                                         alt="Detail locaion icon"
                                         src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/detail-locaion-icon.svg"
                                     />
-                                    <div className="detail-location-text">오리역</div>
+                                    <div className="detail-location-text">{gathering ? gathering.location  : "Loading..."}</div>
                                     <div className="detail-blank" />
                                     <div className="detail-buttons">
                                         <div className="detail-update-button">
-                                            <div className="text-wrapper-3">수정</div>
+                                            <div className="text-wrapper-update"><Link to={`/update/${gatheringId}`}>수정</Link></div>
                                         </div>
                                         <div className="detail-delete-button">
-                                            <div className="text-wrapper-3">삭제</div>
+                                            <button className="text-wrapper-delete" onClick={deleteButton}>삭제</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="detail-join-button">
-                                <div className="detail-join-text">바로 참여 하기</div>
+                                <button className="detail-join-text">바로 참여 하기</button>
                             </div>
                         </div>
                     </div>
