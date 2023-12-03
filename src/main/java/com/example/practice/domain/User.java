@@ -51,8 +51,8 @@ public class User {
     @JsonManagedReference("user_gatherings")
     private List<UserGathering> userGatherings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "creatorId", fetch = FetchType.LAZY)
-    private List<Gathering> gatherings = new ArrayList<>();
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    private List<Gathering> createGatherings = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

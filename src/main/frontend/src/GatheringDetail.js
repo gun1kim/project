@@ -43,6 +43,17 @@ function GatheringDetail() {
             })
 
     };
+    const joinGathering = async () => {
+        await axios.get(`http://localhost:8080/api/usergatherings/users/1/gathering/${gatheringId}`)
+            .then((response) => {
+                console.log("join success")
+                alert('모임 참여에 성공했습니다');
+            })
+            .catch((error) => {
+                console.log("join fail")
+                console.log(error);
+            })
+    }
 
 
 
@@ -88,7 +99,7 @@ function GatheringDetail() {
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/nature-3289812-1920-2.png"
                             />
                             <div className="detail-main-writer">
-                                <div className="detail-writer">익명의 서포터</div>
+                                <div className="detail-writer">{gathering && gathering.creator ? gathering.creator.name : "Loading..."}</div>
                                 <div className="detail-title">{gathering ? gathering.title : "Loading..."}</div>
                             </div>
                             <div className="detail-main-content">
@@ -99,7 +110,7 @@ function GatheringDetail() {
                                     👟이런 활동을 할 거예요! <br />
                                     {gathering ? gathering.etc : "Loading..."}
                                     <br /> - 혼자 읽을땐 눈치가 보여 선행을 선뜻하지 못했지만 함께라면 가능해요.
-                                    <br /> - 선정한 봉사 소개와 선정이유-&gt;봉사-&gt;깨달은 것 나누기
+                                    <br /> - 선정한 봉사 소개와 선정이유-&gt;봉사-&gt;깨달은 것 나누기"
                                     <br /> - 선행를 통해 모두가 1cm라도 성장하길 바랍니다.
                                     <br /> - 각자 먹을 소소한 간식도 챙겨오셔도됩니다. <br />
                                     <br />
@@ -157,7 +168,7 @@ function GatheringDetail() {
                                 </div>
                             </div>
                             <div className="detail-join-button">
-                                <button className="detail-join-text">바로 참여 하기</button>
+                                <button className="detail-join-text" onClick={joinGathering}>바로 참여 하기</button>
                             </div>
                         </div>
                     </div>

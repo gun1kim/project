@@ -450,9 +450,9 @@
 
 .gathering-index .gathering-list-sum {
     align-items: center;
-    /*display: flex;*/
+    display: flex;
     gap: 10px;
-    /*height: 21px;*/
+    height: 21px;
     position: relative;
     width: 357px;
     word-break: break-word;
@@ -464,18 +464,9 @@
     -webkit-box-orient: vertical;
 }
 
-/*.gathering-index .gathering-list-sum-2 {*/
-/*    color: #6f6f6f;*/
-/*    font-family: "Poppins", Helvetica;*/
-/*    font-size: 16px;*/
-/*    font-weight: 300;*/
-/*    height: 21px;*/
-/*    letter-spacing: 0;*/
-/*    line-height: normal;*/
-/*    margin-top: -1px;*/
-/*    position: relative;*/
-/*    width: 277.06px;*/
-/*}*/
+
+
+
 
 .gathering-index .gathering-list-3 {
     align-items: center;
@@ -834,4 +825,5 @@
 
 a {
     text-decoration: none;
+    color: black;
 }

@@ -6,7 +6,9 @@ import com.example.practice.dto.GatheringCreateDto;
 import com.example.practice.dto.GatheringUpdateDto;
 import com.example.practice.image.FileStore;
 import com.example.practice.repository.GatheringRepository;
+import com.example.practice.repository.UserGatheringRepository;
 import com.example.practice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,14 +26,20 @@ public class GatheringService {
 
 
     private final GatheringRepository gatheringRepository;
+    private final UserRepository userRepository;
+    private final UserGatheringRepository userGatheringRepository;
 
     public List<Gathering> getAllGatherings() {
         return gatheringRepository.findAll();
     }
 
+    @Transactional
     public Gathering getGatheringById(Long gatheringId) {
 
         return gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such data"));
+//        Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such gathering"));
+//        gathering.getCreator().getName();
+//        return gathering;
     }
 
     public List<Gathering> getAllByStatus(boolean status) {
@@ -47,6 +55,23 @@ public class GatheringService {
         gathering.setLocation(gatheringCreateDto.getLocation());
         gathering.setImage(gatheringCreateDto.getImage().getOriginalFilename());
         gathering.setCapacity(gatheringCreateDto.getCapacity());
+        
+        gatheringRepository.save(gathering);
+    }
+
+    public void createGathering(GatheringCreateDto gatheringCreateDto, Long creatorId) {  // Add creatorId parameter
+        User creator = userRepository.findById(creatorId)  // Load the user from the database
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + creatorId));
+
+        Gathering gathering = new Gathering();
+        gathering.setTitle(gatheringCreateDto.getTitle());
+        gathering.setIntro(gatheringCreateDto.getIntro());
+        gathering.setEtc(gatheringCreateDto.getEtc());
+        gathering.setLocation(gatheringCreateDto.getLocation());
+        gathering.setImage(gatheringCreateDto.getImage().getOriginalFilename());
+        gathering.setCapacity(gatheringCreateDto.getCapacity());
+        gathering.setCreator(creator);  // Set the creator of the gathering
+        creator.getCreateGatherings().add(gathering); // Add the gathering to the user's createdGatherings list
 
         gatheringRepository.save(gathering);
     }

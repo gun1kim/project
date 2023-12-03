@@ -134,7 +134,7 @@ function GatheringList() {
                                 <div className="gathering-list-title">
                                     <Link to={`/${item.gatheringId}`}><div className="gathering-list-title-2">{item.title}</div></Link>
                                 </div>
-                                <div className="gathering-list-sum">{item.intro}</div>
+                                <div className="gathering-list-sum"><Link to={`/${item.gatheringId}`}>{item.intro}</Link></div>
                                 <div className="gathering-list-3">
                                     <img
                                         className="gathering-list-4"

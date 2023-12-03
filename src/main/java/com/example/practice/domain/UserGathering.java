@@ -19,7 +19,6 @@ public class UserGathering {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonBackReference("user_gatherings")
-
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

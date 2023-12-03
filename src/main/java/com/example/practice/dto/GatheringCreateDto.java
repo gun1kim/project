@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 public class GatheringCreateDto {
@@ -21,5 +22,7 @@ public class GatheringCreateDto {
     private MultipartFile image;
 
     private Timestamp createAt;
+
+    private List<UserGatheringDto> userGatherings;
 
 }

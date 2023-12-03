@@ -38,9 +38,20 @@ public class GatherController {
         return gatheringService.getAllGatherings();
     }
 
+//    @GetMapping("/gathering/{gatheringId}")
+//    public Gathering getGatheringById(@PathVariable Long gatheringId) {
+//        return gatheringService.getGatheringById(gatheringId);
+//    }
+
     @GetMapping("/gathering/{gatheringId}")
-    public Gathering getGatheringById(@PathVariable Long gatheringId) {
-        return gatheringService.getGatheringById(gatheringId);
+    public ResponseEntity<Gathering> getGatheringById(@PathVariable Long gatheringId) {
+        Gathering gathering = gatheringService.getGatheringById(gatheringId);
+
+        if (gathering == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(gathering, HttpStatus.OK);
     }
 
     @GetMapping("/gathering/status?{status}")

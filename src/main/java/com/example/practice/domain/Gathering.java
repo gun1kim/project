@@ -25,7 +25,7 @@ public class Gathering {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
-    private User creatorId;
+    private User creator;
 
     @Column(length = 50, nullable = false)
     private String title;
