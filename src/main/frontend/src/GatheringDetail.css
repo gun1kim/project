@@ -507,6 +507,7 @@
     flex: 0 0 auto;
     gap: 10px;
     position: relative;
+    right: 50px;
 }
 
 .detail-index .detail-update-button {
@@ -599,7 +600,7 @@
 
 .detail-index .profile-icon {
     height: 43px;
-    left: 674px;
+    left: 682px;
     position: absolute;
     top: 337px;
     width: 43px;

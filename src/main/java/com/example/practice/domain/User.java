@@ -1,6 +1,9 @@
 package com.example.practice.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -16,7 +19,10 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-@ToString(exclude = "userGatherings")
+@ToString(exclude = {"userGatherings", "createGatherings"})
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -43,12 +49,10 @@ public class User {
 
     private String profile;
 
-//    @Column(nullable = false, columnDefinition = "TIMESTAMP default CURRENT_TIMESTAMP")
     @Column(nullable = false)
     private Timestamp createAt;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonManagedReference("user_gatherings")
     private List<UserGathering> userGatherings = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)

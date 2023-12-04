@@ -4,6 +4,7 @@ import com.example.practice.domain.Gathering;
 import com.example.practice.domain.User;
 import com.example.practice.domain.UserGathering;
 import com.example.practice.dto.GatheringCreateDto;
+import com.example.practice.dto.GatheringDto;
 import com.example.practice.dto.GatheringUpdateDto;
 import com.example.practice.service.GatheringService;
 import lombok.RequiredArgsConstructor;
@@ -33,70 +34,72 @@ public class GatherController {
     private final GatheringService gatheringService;
 
 
+//    @GetMapping("/gathering")
+//    public List<Gathering> getAllGatherings() {
+//        return gatheringService.getAllGatherings();
+//    }
+
     @GetMapping("/gathering")
-    public List<Gathering> getAllGatherings() {
-        return gatheringService.getAllGatherings();
+    public ResponseEntity<List<GatheringDto>> findAll() {
+        List<Gathering> gatherings = gatheringService.getAllGatherings();
+        List<GatheringDto> gatheringDtos = gatherings.stream()
+                .map(GatheringDto::fromEntity)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(gatheringDtos, HttpStatus.OK);
     }
 
 //    @GetMapping("/gathering/{gatheringId}")
-//    public Gathering getGatheringById(@PathVariable Long gatheringId) {
-//        return gatheringService.getGatheringById(gatheringId);
+//    public ResponseEntity<Gathering> getGatheringById(@PathVariable Long gatheringId) {
+//        Gathering gathering = gatheringService.getGatheringById(gatheringId);
+//
+//        if (gathering == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        return new ResponseEntity<>(gathering, HttpStatus.OK);
 //    }
 
     @GetMapping("/gathering/{gatheringId}")
-    public ResponseEntity<Gathering> getGatheringById(@PathVariable Long gatheringId) {
+    public ResponseEntity<GatheringDto> getGatheringById(@PathVariable Long gatheringId) {
         Gathering gathering = gatheringService.getGatheringById(gatheringId);
-
-        if (gathering == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(gathering, HttpStatus.OK);
+        GatheringDto gatheringDto = GatheringDto.fromEntity(gathering);
+        return new ResponseEntity<>(gatheringDto, HttpStatus.OK);
     }
 
     @GetMapping("/gathering/status?{status}")
     public List<Gathering> getGatheringByStatus(@PathVariable boolean status) {
-        List<Gathering> gatherings = gatheringService.getAllGatherings();
-        List<Gathering> list = new ArrayList<>();
-        for (Gathering gathering : gatherings) {
-            if (gathering.isStatus() == status) {
-                list.add(gathering);
-            }
-        }
-        return list;
+        List<Gathering> gatherings = gatheringService.getAllByStatus(status);
+//        List<Gathering> list = new ArrayList<>();
+//        for (Gathering gathering : gatherings) {
+//            if (gathering.isStatus() == status) {
+//                list.add(gathering);
+//            }
+//        }
+        return gatherings;
     }
 
 
-//    @PostMapping("/gathering")
-//    public ResponseEntity<Resource> addGathering(@RequestParam("title") String title, @RequestParam("intro") String intro,
-//                                                 @RequestParam("image") MultipartFile image, @RequestParam("location") String location,
-//                                                 @RequestParam("capacity") int capacity, @RequestParam("etc") String etc) throws IOException {
-//
-//
-//        saveFile(image);
-//        Gathering gathering = new Gathering();
-//        gathering.setTitle(title);
-//        gathering.setIntro(intro);
-//        gathering.setImage(image.getOriginalFilename());
-//
-//
-//        gathering.setLocation(location);
-//        gathering.setCapacity(capacity);
-//        gathering.setEtc(etc);
-//        gatheringService.createGathering(gathering);
-//        return ResponseEntity.status(HttpStatus.CREATED).build();
-//
-//
-//    }
+
     @PostMapping("/gathering")
     public ResponseEntity<Resource> addGathering(@ModelAttribute GatheringCreateDto gatheringCreateDto) throws IOException {
         Gathering gathering = new Gathering();
         String imageName = saveFile(gatheringCreateDto.getImage());
         gathering.setImage(imageName);
+        Long creatorId = 1L;
 
-        gatheringService.createGathering(gatheringCreateDto);
+        gatheringService.createGathering(gatheringCreateDto, creatorId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+//    @PostMapping("/gathering")
+//    public ResponseEntity<Resource> addGathering(@ModelAttribute GatheringCreateDto gatheringCreateDto, @RequestParam Long creatorId) throws IOException {
+//        Gathering gathering = new Gathering();
+//        String imageName = saveFile(gatheringCreateDto.getImage());
+//        gathering.setImage(imageName);
+//
+//        gatheringService.createGathering(gatheringCreateDto, creatorId);
+//        return ResponseEntity.status(HttpStatus.OK).build();
+//    }
 
 
     @PutMapping("/gathering/{gatheringId}")

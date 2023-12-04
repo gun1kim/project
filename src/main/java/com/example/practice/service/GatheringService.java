@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class GatheringService {
 
@@ -33,14 +34,12 @@ public class GatheringService {
         return gatheringRepository.findAll();
     }
 
-    @Transactional
     public Gathering getGatheringById(Long gatheringId) {
 
         return gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such data"));
-//        Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such gathering"));
-//        gathering.getCreator().getName();
-//        return gathering;
+
     }
+
 
     public List<Gathering> getAllByStatus(boolean status) {
         return gatheringRepository.findAllByStatusEquals(status);
@@ -59,9 +58,13 @@ public class GatheringService {
         gatheringRepository.save(gathering);
     }
 
+
     public void createGathering(GatheringCreateDto gatheringCreateDto, Long creatorId) {  // Add creatorId parameter
         User creator = userRepository.findById(creatorId)  // Load the user from the database
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + creatorId));
+
+//        Gathering gathering = gatheringCreateDto.toEntity(creator);
+//        gatheringRepository.save(gathering);
 
         Gathering gathering = new Gathering();
         gathering.setTitle(gatheringCreateDto.getTitle());
@@ -74,10 +77,13 @@ public class GatheringService {
         creator.getCreateGatherings().add(gathering); // Add the gathering to the user's createdGatherings list
 
         gatheringRepository.save(gathering);
+
     }
 
     public void updateGathering(Long gatheringId, GatheringUpdateDto gatheringUpdateDto) {
         Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such gathering"));
+
+//        User creator = userRepository.findById(gatheringUpdateDto.getCreatorId()).orElseThrow(() -> new IllegalArgumentException("user not found"));
 
         gathering.setTitle(gatheringUpdateDto.getTitle());
         gathering.setIntro(gatheringUpdateDto.getIntro());
@@ -90,6 +96,11 @@ public class GatheringService {
     }
 
     public void deleteById(Long id) {
+//        gatheringRepository.deleteById(id);
+        Gathering gathering = gatheringRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Gathering not found with id: " + id));
+
+        gathering.getUserGatherings().clear();
+
         gatheringRepository.deleteById(id);
     }
 

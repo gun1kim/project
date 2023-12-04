@@ -1,6 +1,9 @@
 package com.example.practice.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -16,7 +19,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "userGatherings")
+@ToString(exclude = {"userGatherings"})
+@Builder
 public class Gathering {
 
     @Id
@@ -55,17 +59,7 @@ public class Gathering {
     private Timestamp createAt;
 
     @OneToMany(mappedBy = "gathering", fetch = FetchType.LAZY)
-    @JsonManagedReference("gathering_gatherings")
     private List<UserGathering> userGatherings = new ArrayList<>();
-
-//    public Gathering(String title, String intro, String etc, String location, String image, int capacity) {
-//        this.title = title;
-//        this.intro = intro;
-//        this.etc = etc;
-//        this.location = location;
-//        this.image = image;
-//        this.capacity = capacity;
-//    }
 
     @PrePersist
     public void prePersist() {

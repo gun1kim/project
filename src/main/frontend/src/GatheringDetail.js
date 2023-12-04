@@ -11,22 +11,31 @@ function GatheringDetail() {
     let gatheringId = params.gatheringId;
     const [gathering, setGathering] = useState();
     const navigate = useNavigate();
+    const [participants, setParticipants] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async() => {
-            try {
-                const response = await axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+    const fetchData = () => {
+        axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+            .then((response) => {
                 setGathering(response.data);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData();
-    }, [])
+
+            })
+            .catch((error) => {
+                console.log('Error fetching data from API: ', error);
+            });
+    };
 
     useEffect(() => {
+        fetchData();
 
-    }, [gatheringId, gathering])
+    }, [gatheringId])
+
+    // useEffect(() => {
+    //     fetchData();
+    //     console.log(gathering);
+    // }, [gatheringId])
+
+    // useEffect(() => {
+    // }, [gatheringId, gathering])
 
 
     const deleted = axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
@@ -99,7 +108,7 @@ function GatheringDetail() {
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/nature-3289812-1920-2.png"
                             />
                             <div className="detail-main-writer">
-                                <div className="detail-writer">{gathering && gathering.creator ? gathering.creator.name : "Loading..."}</div>
+                                <div className="detail-writer">{gathering && gathering.creatorName}</div>
                                 <div className="detail-title">{gathering ? gathering.title : "Loading..."}</div>
                             </div>
                             <div className="detail-main-content">
