@@ -28,4 +28,5 @@ public class UserGathering {
         this.user = user;
         this.gathering = gathering;
     }
+
 }

@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,19 +36,26 @@ public class GatherController {
 
     private final GatheringService gatheringService;
 
-
 //    @GetMapping("/gathering")
 //    public List<Gathering> getAllGatherings() {
 //        return gatheringService.getAllGatherings();
 //    }
 
+//    @GetMapping("/gathering")
+//    public ResponseEntity<List<GatheringDto>> findAll() {
+//        List<Gathering> gatherings = gatheringService.getAllGatherings();
+//        List<GatheringDto> gatheringDtos = gatherings.stream()
+//                .map(GatheringDto::fromEntity)
+//                .collect(Collectors.toList());
+//        return new ResponseEntity<>(gatheringDtos, HttpStatus.OK);
+//    }
+
     @GetMapping("/gathering")
-    public ResponseEntity<List<GatheringDto>> findAll() {
-        List<Gathering> gatherings = gatheringService.getAllGatherings();
-        List<GatheringDto> gatheringDtos = gatherings.stream()
-                .map(GatheringDto::fromEntity)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(gatheringDtos, HttpStatus.OK);
+    public Page<GatheringDto> list(@PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> page = gatheringService.getAllGatherings(pageable);
+        Page<GatheringDto> pageDto = page.map(GatheringDto::fromEntity);
+        return pageDto;
+
     }
 
 //    @GetMapping("/gathering/{gatheringId}")
@@ -66,16 +76,25 @@ public class GatherController {
         return new ResponseEntity<>(gatheringDto, HttpStatus.OK);
     }
 
-    @GetMapping("/gathering/status?{status}")
-    public List<Gathering> getGatheringByStatus(@PathVariable boolean status) {
-        List<Gathering> gatherings = gatheringService.getAllByStatus(status);
+    @GetMapping("/gathering/status")
+    public Page<GatheringDto> getGatheringByStatus(@RequestParam boolean status, Pageable pageable) {
+//    public Page<GatheringDto> getGatheringByStatus(@PathVariable boolean status, @PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> gatherings = gatheringService.getAllByStatus(status, pageable);
+        Page<GatheringDto> gatheringDtos = gatherings.map(GatheringDto::fromEntity);
+        return gatheringDtos;
 //        List<Gathering> list = new ArrayList<>();
 //        for (Gathering gathering : gatherings) {
 //            if (gathering.isStatus() == status) {
 //                list.add(gathering);
 //            }
 //        }
-        return gatherings;
+    }
+
+    @GetMapping("/gathering/title")
+    public Page<GatheringDto> getGatheringByTitle(@RequestParam String title, @PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> gatherings = gatheringService.getAllByTitle(title, pageable);
+        Page<GatheringDto> gatheringDtos = gatherings.map(GatheringDto::fromEntity);
+        return gatheringDtos;
     }
 
 
@@ -122,7 +141,11 @@ public class GatherController {
 
     @DeleteMapping("/gathering/{gatheringId}")
     public void removeGathering(@PathVariable Long gatheringId) {
+
+
         gatheringService.deleteById(gatheringId);
+
+
     }
 
 

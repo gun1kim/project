@@ -46,7 +46,7 @@ public class Gathering {
     @Column
     private String image;
 
-    @Column(columnDefinition = "TINYINT default 0")
+    @Column(columnDefinition = "TINYINT default 0") // 0 = 모집중, 1 = 모집마감
     private boolean status;
 
     @Column(columnDefinition = "INT default 1")
@@ -65,4 +65,5 @@ public class Gathering {
     public void prePersist() {
         this.createAt = new Timestamp(System.currentTimeMillis());
     }
+
 }

@@ -3,29 +3,102 @@ import "./GatheringList.css";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 function GatheringList() {
 
     const [lists, setLists] = useState([]);
-    const [show, setShow] = useState([]);
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [status, setStatus] = useState(null);
+    const [title, setTitle] = useState("");
+    const [timer, setTimer] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const loaction = useLocation();
+
+
 
     const fetchData = () => {
-        axios.get('http://localhost:8080/api/gathering')
+        axios.get(`http://localhost:8080/api/gathering?page=${page}`)
             .then((response) => {
-                setLists(response.data);
+                console.log(response.data);
+                setLists(response.data.content);
+                setTotalPages(response.data.totalPages);
             })
             .catch((error) => {
                 console.log('Error fetching data from API: ' , error);
             });
     };
 
+    const fetchDataByStatus = () => {
+        axios.get(`http://localhost:8080/api/gathering/status?status=${status}`)
+        .then((response) => {
+            setLists(response.data.content);
+            setTotalPages(response.data.totalPages);
+        })
+        .catch((error) => {
+            console.log('Error fetching data from API: ', error);
+        })
+    }
+
+    const fetchDataByTitle = () => {
+        const encodedTitle = encodeURIComponent(title);
+        axios.get(`http://localhost:8080/api/gathering/title?title=${encodedTitle}`)
+        .then((response) => {
+            setLists(response.data.content);
+            setTotalPages(response.data.totalPages);
+        })
+        .catch((error) => {
+            console.log('Error fetching data from API: ', error);
+        })
+    }
+
+
+    function createPageNumberArray(startPage, endPage) {
+        let pages = []
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+        return pages;
+    }
     useEffect(() => {
-        fetchData();
-    }, []);
+        const pageFromUrl = searchParams.get('page');
+        const statusFromUrl = searchParams.get('status');
+        const titleFromUrl = searchParams.get('title');
+
+        if (pageFromUrl !== null) {
+            setPage(parseInt(pageFromUrl));
+        }
+        if (statusFromUrl !== null) {
+            setStatus(statusFromUrl);
+        }
+        if (titleFromUrl !== null) {
+            setTimer(decodeURIComponent(titleFromUrl));
+        }
+
+    }, [])
 
     useEffect(() => {
-        console.log(lists);
-    }, [lists])
+        searchParams.set('page', page.toString());
+        if (status !== null) {
+            searchParams.set('status', status);
+        }
+        if (title !== null) {
+            searchParams.set('title', encodeURIComponent(title));
+        }
+        setSearchParams(searchParams);
+
+        if (status !== null) {
+            fetchDataByStatus();
+        }
+        else if (title !== '') {
+            fetchDataByTitle()
+        } 
+        else {
+            fetchData();
+        }
+
+    }, [page, status, title])
 
     return (
         <div className="gathering-index">
@@ -106,15 +179,25 @@ function GatheringList() {
                         <div className="text-wrapper-2">기부모임</div>
                     </div>
                 </div>
-                <div className="middle-menu-blank" />
+                {/* <div className="middle-menu-blank" /> */}
                 <div className="middle-menu-search">
-                    <div className="search-icon-wrapper">
-                        <img
+                    <img
                             className="search-icon"
                             alt="Search icon"
                             src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/search-icon@2x.png"
                         />
-                    </div>
+                    <input className="search-box" type="text" placeholder="검색" value={title} onChange={(e) => setTitle(e.target.value)}>
+                        
+                    </input>
+                </div>
+                <div className="select-wrap">
+                    <select value={status} onChange={(e) => {
+                        setStatus(e.target.value || null)
+                    }}>
+                        <option value="">-- 선택하세요 --</option>
+                        <option value="false">모집중</option>
+                        <option value="true">모집 마감</option> 
+                    </select>
                 </div>
             </div>
             <div className="gathering-banner">
@@ -124,6 +207,7 @@ function GatheringList() {
                     src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/65673b953ef9bbba272aaf86/img/gathering-banner-image.png"
                 />
             </div>
+            
 
             <div className="gathering-list-wrap">
                 {lists.map((item, index) => (
@@ -160,15 +244,15 @@ function GatheringList() {
             <div className="gathering-list-8">
                 <div className="pagination-button">
                     <div className="pagination-left-wrap">
-                        <div className="pagination-left">
+                        <button className="pagination-left" onClick={() => setPage(oldPage => Math.max(oldPage - 1, 0))} disabled={page === 0}>
                             <img
                                 className="img-2"
                                 alt="Double left"
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/double-left@2x.png"
                             />
-                        </div>
+                        </button>
                     </div>
-                    <div className="pagination">
+                    {/* <div className="pagination">
                         <div className="text-wrapper-4">1</div>
                     </div>
                     <div className="pagination-num">
@@ -182,15 +266,26 @@ function GatheringList() {
                     </div>
                     <div className="pagination">
                         <div className="text-wrapper-4">5</div>
+                    </div> */}
+
+                    <div className="pagination">
+                    {createPageNumberArray(0, totalPages - 1).map(pageNumber => (
+                        <button className={`text-wrapper-4 ${pageNumber === page ? "active" : ""}`}
+                            key={pageNumber}
+                            onClick={() => setPage(pageNumber)}
+                            disabled={pageNumber === page}>
+                            {pageNumber + 1}                    
+                        </button>
+                    ))}
                     </div>
-                    <div className="pagination-right">
-                        <div className="double-right-wrapper">
+                    <div className="pagination-right"  onClick={() => setPage(oldPage => Math.min(oldPage + 1, totalPages - 1))} disabled={page === totalPages - 1}>
+                        <button className="double-right-wrapper">
                             <img
                                 className="img-2"
                                 alt="Double right"
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/double-right@2x.png"
                             />
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <div className="register-button-wrap">
