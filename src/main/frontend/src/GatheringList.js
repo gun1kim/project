@@ -10,9 +10,10 @@ function GatheringList() {
     const [lists, setLists] = useState([]);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState(null);
+    const [status, setStatus] = useState("");
     const [title, setTitle] = useState("");
     const [timer, setTimer] = useState(null);
+
     const [searchParams, setSearchParams] = useSearchParams();
     const loaction = useLocation();
 
@@ -61,6 +62,7 @@ function GatheringList() {
         }
         return pages;
     }
+
     useEffect(() => {
         const pageFromUrl = searchParams.get('page');
         const statusFromUrl = searchParams.get('status');
@@ -69,7 +71,7 @@ function GatheringList() {
         if (pageFromUrl !== null) {
             setPage(parseInt(pageFromUrl));
         }
-        if (statusFromUrl !== null) {
+        if (statusFromUrl !== "") {
             setStatus(statusFromUrl);
         }
         if (titleFromUrl !== null) {
@@ -80,7 +82,7 @@ function GatheringList() {
 
     useEffect(() => {
         searchParams.set('page', page.toString());
-        if (status !== null) {
+        if (status !== "") {
             searchParams.set('status', status);
         }
         if (title !== null) {
@@ -88,10 +90,10 @@ function GatheringList() {
         }
         setSearchParams(searchParams);
 
-        if (status !== null) {
+        if (status !== "") {
             fetchDataByStatus();
         }
-        else if (title !== '') {
+        else if (title !== "") {
             fetchDataByTitle()
         } 
         else {
@@ -192,11 +194,11 @@ function GatheringList() {
                 </div>
                 <div className="select-wrap">
                     <select value={status} onChange={(e) => {
-                        setStatus(e.target.value || null)
+                        setStatus(e.target.value || "")
                     }}>
                         <option value="">-- 선택하세요 --</option>
-                        <option value="false">모집중</option>
-                        <option value="true">모집 마감</option> 
+                        <option value="OPEN">모집중</option>
+                        <option value="CLOSED">모집 마감</option> 
                     </select>
                 </div>
             </div>
@@ -240,33 +242,19 @@ function GatheringList() {
                         </div>
                     </div>
                 ))}
-        </div>
+            </div>
             <div className="gathering-list-8">
                 <div className="pagination-button">
                     <div className="pagination-left-wrap">
                         <button className="pagination-left" onClick={() => setPage(oldPage => Math.max(oldPage - 1, 0))} disabled={page === 0}>
-                            <img
+                            {/* <img
                                 className="img-2"
                                 alt="Double left"
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/double-left@2x.png"
-                            />
+                            /> */}
+                            &lt;&lt;
                         </button>
                     </div>
-                    {/* <div className="pagination">
-                        <div className="text-wrapper-4">1</div>
-                    </div>
-                    <div className="pagination-num">
-                        <div className="element">2</div>
-                    </div>
-                    <div className="pagination">
-                        <div className="text-wrapper-4">3</div>
-                    </div>
-                    <div className="pagination">
-                        <div className="text-wrapper-4">4</div>
-                    </div>
-                    <div className="pagination">
-                        <div className="text-wrapper-4">5</div>
-                    </div> */}
 
                     <div className="pagination">
                     {createPageNumberArray(0, totalPages - 1).map(pageNumber => (
@@ -280,11 +268,12 @@ function GatheringList() {
                     </div>
                     <div className="pagination-right"  onClick={() => setPage(oldPage => Math.min(oldPage + 1, totalPages - 1))} disabled={page === totalPages - 1}>
                         <button className="double-right-wrapper">
-                            <img
+                            {/* <img
                                 className="img-2"
                                 alt="Double right"
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656753efcb8de04689f6bb1b/img/double-right@2x.png"
-                            />
+                            /> */}
+                            &gt;&gt;
                         </button>
                     </div>
                 </div>

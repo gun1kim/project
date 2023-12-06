@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,9 @@ public class GatheringCreateDto {
 
     private MultipartFile image;
 
+    private LocalDateTime deadline;
+    private LocalDateTime startAt;
+
     private List<UserGatheringDto> userGatherings;
 
     public Gathering toEntity(User creator) {
@@ -42,6 +46,8 @@ public class GatheringCreateDto {
                 .location(location)
                 .capacity(capacity)
                 .image(image.getOriginalFilename())
+                .deadline(deadline)
+                .startAt(startAt)
                 .build();
 
     }

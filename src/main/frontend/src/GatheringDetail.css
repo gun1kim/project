@@ -494,6 +494,30 @@
     left: 25px;
 }
 
+.detail-index .detail-gathering-wrap {
+    align-items: center;
+    align-self: stretch;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 10px;
+    position: relative;
+    width: 100%;
+}
+
+.detail-index .detail-gathering-text {
+    color: #000000;
+    font-family: "Inter", Helvetica;
+    font-size: 14px;
+    font-weight: 300;
+    height: 10px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: relative;
+    white-space: nowrap;
+    width: fit-content;
+    left: 25px;
+}
+
 .detail-index .detail-blank {
     align-self: stretch;
     flex: 1;
@@ -579,6 +603,7 @@
     padding: 10px 0px;
     position: relative;
     width: 100%;
+    margin-top: 10px;
 }
 
 .detail-index .detail-join-text {

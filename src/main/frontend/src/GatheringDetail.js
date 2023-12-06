@@ -53,7 +53,7 @@ function GatheringDetail() {
 
     };
     const joinGathering = async () => {
-        await axios.get(`http://localhost:8080/api/usergatherings/users/1/gathering/${gatheringId}`)
+        await axios.get(`http://localhost:8080/api/usergatherings/users/2/gathering/${gatheringId}`)
             .then((response) => {
                 console.log("join success")
                 alert('모임 참여에 성공했습니다');
@@ -174,6 +174,9 @@ function GatheringDetail() {
                                             <button className="text-wrapper-delete" onClick={deleteButton}>삭제</button>
                                         </div>
                                     </div>
+                                </div>
+                                <div className="detail-gathering-wrap">
+                                    <div className="detail-gathering-text">모임 시각: {gathering ? gathering.startAt : "Loading..."}</div>
                                 </div>
                             </div>
                             <div className="detail-join-button">

@@ -373,16 +373,21 @@
 
 .gathering-index .gathering-list-wrap {
     align-items: flex-start;
-    align-self: stretch;
+    /* align-self: stretch; */
     background-color: #ffffff;
-    display: flex;
-    flex: 0 0 auto;
-    flex-wrap: wrap;
+    /* display: flex; */
+    /* flex: 0 0 auto; */
+    /* flex-wrap: wrap; */
     gap: 10px 10px;
     justify-content: center;
     padding: 10px;
     position: relative;
-    width: 100%;
+    /* width: 100%; */
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+    width: fit-content;
+    align-self: center;
 }
 
 .gathering-index .gathering-list-wrap .gathering-list:nth-child(n+9) {
@@ -397,6 +402,7 @@
     gap: 10px;
     position: relative;
     border-radius: 30px;
+    width: fit-content;
 }
 
 .gathering-index .gathering-list-2 {
@@ -575,6 +581,7 @@
     margin-top: -4px;
     position: relative;
     width: 25px;
+    cursor: pointer;
 }
 
 .gathering-index .img-2 {
@@ -585,9 +592,9 @@
 
 .gathering-index .pagination {
     align-items: center;
-    border: 1px solid;
+    /* border: 1px solid;
     border-color: var(--neutral-400);
-    border-radius: 5px;
+    border-radius: 5px; */
     display: flex;
     gap: 5px;
     height: 35px;
@@ -609,7 +616,8 @@ button.active {
     letter-spacing: 0;
     line-height: normal;
     position: relative;
-    width: fit-content;
+    width: 40px;
+    height: 40px;
 }
 
 .gathering-index .pagination-num {
@@ -652,6 +660,7 @@ button.active {
     justify-content: center;
     position: relative;
     width: 25px;
+    cursor: pointer;
 }
 
 .gathering-index .register-button-wrap {

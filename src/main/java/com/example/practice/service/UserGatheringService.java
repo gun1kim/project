@@ -1,6 +1,7 @@
 package com.example.practice.service;
 
 import com.example.practice.domain.Gathering;
+import com.example.practice.domain.Status;
 import com.example.practice.domain.User;
 import com.example.practice.domain.UserGathering;
 import com.example.practice.repository.GatheringRepository;
@@ -9,10 +10,12 @@ import com.example.practice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserGatheringService {
 
     private final UserGatheringRepository userGatheringRepository;
@@ -28,11 +31,16 @@ public class UserGatheringService {
             log.info("모임 정원 초과");
             throw new Exception("모임 정원 초과");
         }
-        else if (gathering.isStatus() == true) {
+        else if (gathering.getStatus() == Status.CLOSED) {
             log.info("마감된 모임입니다.");
             throw new Exception("마감된 모임");
         }
+
         gathering.setCount(gathering.getCount() + 1);
+        if (gathering.getCount() == gathering.getCapacity()) {
+            gathering.setStatus(Status.CLOSED);
+        }
+
         gatheringRepository.save(gathering);
         UserGathering userGathering = new UserGathering();
         userGathering.setUser(user);

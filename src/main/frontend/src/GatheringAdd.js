@@ -12,6 +12,10 @@ function GatheringAdd() {
     const [location, setLocation] = useState("");
     const [capacity, setCapacity] = useState("");
     const [etc, setEtc] = useState("");
+    const now = new Date();
+    const localDateTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const [deadline, setDeadline] = useState(localDateTime);
+    const [startAt, setStartAt] = useState(localDateTime)
 
     const navigate = useNavigate();
 
@@ -32,9 +36,6 @@ function GatheringAdd() {
         setIntro(e.target.value);
     }
     const handleImgChange = (e) => {
-        // setImage(() => e.target.files[0]);
-        // const objectUrl = URL.createObjectURL(e.target.files[0]);
-        // setPreview(objectUrl);
         const file = e.target.files[0];
         setImage(file);
         if (file && file.type.substr(0, 5) === 'image') {
@@ -52,6 +53,14 @@ function GatheringAdd() {
         setCapacity(e.target.value)
     }
 
+    const handleDeadlineChange = (e) => {
+        setDeadline(e.target.value);
+    }
+
+    const handleStartAtChange = (e) => {
+        setStartAt(e.target.value);
+    }
+
     const handleEtcChange = (e) => {
         setEtc(e.target.value);
     }
@@ -63,6 +72,8 @@ function GatheringAdd() {
         formData.append("image", image);
         formData.append("location", location);
         formData.append("capacity", capacity);
+        formData.append("deadline", deadline);
+        formData.append("startAt", startAt);
         formData.append("etc", etc);
 
         const response = await axios.post('http://localhost:8080/api/gathering', formData, config)
@@ -135,6 +146,10 @@ function GatheringAdd() {
                             <input type="text" className="location" onChange={handleLocationChange}/>
                             <div className="text-wrapper-2">정원</div>
                             <input type="text" className="capacity" onChange={handleCapacityChange}/>
+                            <div className="text-wrapper-2">모집 마감일</div>
+                            <input type="datetime-local" className="deadline" value={deadline} onChange={handleDeadlineChange}/>
+                            <div className="text-wrapper-2">모임 일시</div>
+                            <input type="datetime-local" className="startAt" value={startAt} onChange={handleStartAtChange} />
                             <div className="text-wrapper-2">기타안내사항</div>
                             <input type="text" className="etc" onChange={handleEtcChange}/>
                         </form>

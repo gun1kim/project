@@ -1,12 +1,14 @@
 package com.example.practice.dto;
 
 import com.example.practice.domain.Gathering;
+import com.example.practice.domain.Status;
 import com.example.practice.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,7 +23,9 @@ public class GatheringDto {
     private String etc;
     private String location;
     private String image;
-    private boolean status;
+    private Status status;
+    private LocalDateTime deadline;
+    private LocalDateTime startAt;
     private int count;
     private int capacity;
 
@@ -35,6 +39,8 @@ public class GatheringDto {
                 .location(location)
                 .image(image)
                 .status(status)
+                .deadline(deadline)
+                .startAt(startAt)
                 .count(count)
                 .capacity(capacity)
                 .build();
@@ -51,7 +57,9 @@ public class GatheringDto {
                 .etc(gathering.getEtc())
                 .location(gathering.getLocation())
                 .image(gathering.getImage())
-                .status(gathering.isStatus())
+                .status(gathering.getStatus())
+                .deadline(gathering.getDeadline())
+                .startAt(gathering.getStartAt())
                 .count(gathering.getCount())
                 .capacity(gathering.getCapacity())
                 .build();

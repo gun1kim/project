@@ -1,11 +1,13 @@
 package com.example.practice.controller;
 
 import com.example.practice.domain.Gathering;
+import com.example.practice.domain.Status;
 import com.example.practice.domain.User;
 import com.example.practice.domain.UserGathering;
 import com.example.practice.dto.GatheringCreateDto;
 import com.example.practice.dto.GatheringDto;
 import com.example.practice.dto.GatheringUpdateDto;
+import com.example.practice.dto.UserDto;
 import com.example.practice.service.GatheringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,63 +38,32 @@ public class GatherController {
 
     private final GatheringService gatheringService;
 
-//    @GetMapping("/gathering")
-//    public List<Gathering> getAllGatherings() {
-//        return gatheringService.getAllGatherings();
-//    }
-
-//    @GetMapping("/gathering")
-//    public ResponseEntity<List<GatheringDto>> findAll() {
-//        List<Gathering> gatherings = gatheringService.getAllGatherings();
-//        List<GatheringDto> gatheringDtos = gatherings.stream()
-//                .map(GatheringDto::fromEntity)
-//                .collect(Collectors.toList());
-//        return new ResponseEntity<>(gatheringDtos, HttpStatus.OK);
-//    }
-
     @GetMapping("/gathering")
-    public Page<GatheringDto> list(@PageableDefault(size = 8) Pageable pageable) {
-        Page<Gathering> page = gatheringService.getAllGatherings(pageable);
+    public Page<GatheringDto> gatheringList(@PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> page = gatheringService.findAllGatherings(pageable);
         Page<GatheringDto> pageDto = page.map(GatheringDto::fromEntity);
         return pageDto;
 
     }
 
-//    @GetMapping("/gathering/{gatheringId}")
-//    public ResponseEntity<Gathering> getGatheringById(@PathVariable Long gatheringId) {
-//        Gathering gathering = gatheringService.getGatheringById(gatheringId);
-//
-//        if (gathering == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        return new ResponseEntity<>(gathering, HttpStatus.OK);
-//    }
-
     @GetMapping("/gathering/{gatheringId}")
-    public ResponseEntity<GatheringDto> getGatheringById(@PathVariable Long gatheringId) {
-        Gathering gathering = gatheringService.getGatheringById(gatheringId);
+    public ResponseEntity<GatheringDto> gatheringDetail(@PathVariable Long gatheringId) {
+        Gathering gathering = gatheringService.findGatheringById(gatheringId);
         GatheringDto gatheringDto = GatheringDto.fromEntity(gathering);
         return new ResponseEntity<>(gatheringDto, HttpStatus.OK);
     }
 
     @GetMapping("/gathering/status")
-    public Page<GatheringDto> getGatheringByStatus(@RequestParam boolean status, Pageable pageable) {
-//    public Page<GatheringDto> getGatheringByStatus(@PathVariable boolean status, @PageableDefault(size = 8) Pageable pageable) {
-        Page<Gathering> gatherings = gatheringService.getAllByStatus(status, pageable);
+    public Page<GatheringDto> gatheringListByStatus(@RequestParam String status, @PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> gatherings = gatheringService.findGatheringByStatus(status, pageable);
         Page<GatheringDto> gatheringDtos = gatherings.map(GatheringDto::fromEntity);
         return gatheringDtos;
-//        List<Gathering> list = new ArrayList<>();
-//        for (Gathering gathering : gatherings) {
-//            if (gathering.isStatus() == status) {
-//                list.add(gathering);
-//            }
-//        }
+
     }
 
     @GetMapping("/gathering/title")
-    public Page<GatheringDto> getGatheringByTitle(@RequestParam String title, @PageableDefault(size = 8) Pageable pageable) {
-        Page<Gathering> gatherings = gatheringService.getAllByTitle(title, pageable);
+    public Page<GatheringDto> gatheringListByTitle(@RequestParam String title, @PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> gatherings = gatheringService.findGatheringByTitle(title, pageable);
         Page<GatheringDto> gatheringDtos = gatherings.map(GatheringDto::fromEntity);
         return gatheringDtos;
     }
@@ -100,50 +71,38 @@ public class GatherController {
 
 
     @PostMapping("/gathering")
-    public ResponseEntity<Resource> addGathering(@ModelAttribute GatheringCreateDto gatheringCreateDto) throws IOException {
+    public ResponseEntity<Resource> gatheringAdd(@ModelAttribute GatheringCreateDto gatheringCreateDto) throws IOException {
         Gathering gathering = new Gathering();
         String imageName = saveFile(gatheringCreateDto.getImage());
         gathering.setImage(imageName);
         Long creatorId = 1L;
 
-        gatheringService.createGathering(gatheringCreateDto, creatorId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        gatheringService.addGathering(gatheringCreateDto, creatorId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-//    @PostMapping("/gathering")
-//    public ResponseEntity<Resource> addGathering(@ModelAttribute GatheringCreateDto gatheringCreateDto, @RequestParam Long creatorId) throws IOException {
-//        Gathering gathering = new Gathering();
-//        String imageName = saveFile(gatheringCreateDto.getImage());
-//        gathering.setImage(imageName);
-//
-//        gatheringService.createGathering(gatheringCreateDto, creatorId);
-//        return ResponseEntity.status(HttpStatus.OK).build();
-//    }
-
 
     @PutMapping("/gathering/{gatheringId}")
-    public void updateGathering(@PathVariable Long gatheringId, @ModelAttribute GatheringUpdateDto gatheringUpdateDto) throws IOException {
+    public void gatheringModify(@PathVariable Long gatheringId, @ModelAttribute GatheringUpdateDto gatheringUpdateDto) throws IOException {
         String imageName = saveFile(gatheringUpdateDto.getImage());
-        gatheringService.updateGathering(gatheringId, gatheringUpdateDto);
+        gatheringService.modifyGathering(gatheringId, gatheringUpdateDto);
     }
+
     @GetMapping("/gathering/{gatheringId}/users")
-    public List<User> getGatheringUsers(@PathVariable Long gatheringId) {
-        Gathering gathering = gatheringService.getGatheringById(gatheringId);
+    public List<UserDto> gatheringUserList(@PathVariable Long gatheringId) {
+        Gathering gathering = gatheringService.findGatheringById(gatheringId);
         List<UserGathering> userGatherings = gathering.getUserGatherings();
 
-        List<User> users = userGatherings.stream()
-                .map(UserGathering::getUser)
+        List<UserDto> users = userGatherings.stream()
+                .map(userGathering -> UserDto.fromEntity(userGathering.getUser()))
                 .collect(Collectors.toList());
         log.info("users = {}", users);
         return users;
     }
 
-
     @DeleteMapping("/gathering/{gatheringId}")
-    public void removeGathering(@PathVariable Long gatheringId) {
+    public void gatheringRemove(@PathVariable Long gatheringId) {
 
-
-        gatheringService.deleteById(gatheringId);
+        gatheringService.removeById(gatheringId);
 
 
     }
