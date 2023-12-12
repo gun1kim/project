@@ -1,13 +1,10 @@
 package com.example.practice.controller;
 
-import com.example.practice.domain.Gathering;
-import com.example.practice.domain.Status;
-import com.example.practice.domain.User;
-import com.example.practice.domain.UserGathering;
-import com.example.practice.dto.GatheringCreateDto;
-import com.example.practice.dto.GatheringDto;
-import com.example.practice.dto.GatheringUpdateDto;
-import com.example.practice.dto.UserDto;
+import com.example.practice.entity.*;
+import com.example.practice.dto.gathering.GatheringCreateDto;
+import com.example.practice.dto.gathering.GatheringDto;
+import com.example.practice.dto.gathering.GatheringUpdateDto;
+import com.example.practice.dto.member.MemberDto;
 import com.example.practice.service.GatheringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +43,7 @@ public class GatherController {
     }
 
     @GetMapping("/gathering/{gatheringId}")
-    public ResponseEntity<GatheringDto> gatheringDetail(@PathVariable Long gatheringId) {
+    public ResponseEntity<GatheringDto> gatheringDetails(@PathVariable Long gatheringId) {
         Gathering gathering = gatheringService.findGatheringById(gatheringId);
         GatheringDto gatheringDto = GatheringDto.fromEntity(gathering);
         return new ResponseEntity<>(gatheringDto, HttpStatus.OK);
@@ -75,6 +71,7 @@ public class GatherController {
         Gathering gathering = new Gathering();
         String imageName = saveFile(gatheringCreateDto.getImage());
         gathering.setImage(imageName);
+//        gathering.setLocation(new Address(gatheringCreateDto.getZoneCode(), gatheringCreateDto.getFullAddress(), gatheringCreateDto.getSubAddress()));
         Long creatorId = 1L;
 
         gatheringService.addGathering(gatheringCreateDto, creatorId);
@@ -87,16 +84,16 @@ public class GatherController {
         gatheringService.modifyGathering(gatheringId, gatheringUpdateDto);
     }
 
-    @GetMapping("/gathering/{gatheringId}/users")
-    public List<UserDto> gatheringUserList(@PathVariable Long gatheringId) {
+    @GetMapping("/gathering/{gatheringId}/members")
+    public List<MemberDto> gatheringUserList(@PathVariable Long gatheringId) {
         Gathering gathering = gatheringService.findGatheringById(gatheringId);
-        List<UserGathering> userGatherings = gathering.getUserGatherings();
+        List<MemberGathering> memberGatherings = gathering.getMemberGatherings();
 
-        List<UserDto> users = userGatherings.stream()
-                .map(userGathering -> UserDto.fromEntity(userGathering.getUser()))
+        List<MemberDto> members = memberGatherings.stream()
+                .map(memberGathering -> MemberDto.fromEntity(memberGathering.getMember()))
                 .collect(Collectors.toList());
-        log.info("users = {}", users);
-        return users;
+        log.info("members = {}", members);
+        return members;
     }
 
     @DeleteMapping("/gathering/{gatheringId}")

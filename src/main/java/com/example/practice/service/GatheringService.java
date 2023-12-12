@@ -1,32 +1,20 @@
 package com.example.practice.service;
 
-import com.example.practice.domain.Gathering;
-import com.example.practice.domain.Status;
-import com.example.practice.domain.User;
-import com.example.practice.domain.UserGathering;
-import com.example.practice.dto.GatheringCreateDto;
-import com.example.practice.dto.GatheringDto;
-import com.example.practice.dto.GatheringUpdateDto;
-import com.example.practice.image.FileStore;
+import com.example.practice.entity.*;
+import com.example.practice.dto.gathering.GatheringCreateDto;
+import com.example.practice.dto.gathering.GatheringUpdateDto;
 import com.example.practice.repository.GatheringRepository;
-import com.example.practice.repository.UserGatheringRepository;
-import com.example.practice.repository.UserRepository;
+import com.example.practice.repository.MemberGatheringRepository;
+import com.example.practice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -36,8 +24,9 @@ public class GatheringService {
 
 
     private final GatheringRepository gatheringRepository;
-    private final UserRepository userRepository;
-    private final UserGatheringRepository userGatheringRepository;
+    private final MemberRepository memberRepository;
+    private final MemberGatheringRepository memberGatheringRepository;
+    private final S3FileUploader s3FileUploader;
 
     @Transactional(readOnly = true)
     public List<Gathering> getAllGatherings() {
@@ -68,15 +57,19 @@ public class GatheringService {
 
 
     public void addGathering(GatheringCreateDto gatheringCreateDto, Long creatorId) {  // Add creatorId parameter
-        User creator = userRepository.findById(creatorId)  // Load the user from the database
+        Member creator = memberRepository.findById(creatorId)  // Load the user from the database
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + creatorId));
 
+        String filepath = "images/gathering";
+        String imageUrl = s3FileUploader.uploadFileToS3(gatheringCreateDto.getImage(), filepath);
+        Address address = new Address(gatheringCreateDto.getZoneCode(), gatheringCreateDto.getFullAddress(), gatheringCreateDto.getSubAddress());
         Gathering gathering = new Gathering();
+
         gathering.setTitle(gatheringCreateDto.getTitle());
         gathering.setIntro(gatheringCreateDto.getIntro());
         gathering.setEtc(gatheringCreateDto.getEtc());
-        gathering.setLocation(gatheringCreateDto.getLocation());
-        gathering.setImage(gatheringCreateDto.getImage().getOriginalFilename());
+        gathering.setLocation(address);
+        gathering.setImage(imageUrl);
         gathering.setCapacity(gatheringCreateDto.getCapacity());
 
         if (gatheringCreateDto.getDeadline().isBefore(LocalDateTime.now())) {
@@ -110,14 +103,14 @@ public class GatheringService {
 
     }
 
-    public void removeById(Long id) {
-        Gathering gathering = gatheringRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Gathering not found with id: " + id));
+    public void removeById(Long gatheringId) {
+        Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("Gathering not found with id: " + gatheringId));
 
-        List<UserGathering> userGatherings = gathering.getUserGatherings();
-        for (UserGathering userGathering : userGatherings) {
-            userGatheringRepository.delete(userGathering);
+        List<MemberGathering> memberGatherings = gathering.getMemberGatherings();
+        for (MemberGathering memberGathering : memberGatherings) {
+            memberGatheringRepository.delete(memberGathering);
         }
-        gatheringRepository.deleteById(id);
+        gatheringRepository.deleteById(gatheringId);
     }
 
     @Scheduled(cron = "0 0 0 * * *")
