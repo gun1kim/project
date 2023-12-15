@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Post from "../../components/Post";
+import ApiClient from "../../components/ApiClient";
 
 function GatheringUpdate() {
     const now = new Date();
@@ -23,7 +24,6 @@ function GatheringUpdate() {
     const [startAt, setStartAt] = useState(localDateTime);
     const [capacity, setCapacity] = useState("");
     const [etc, setEtc] = useState("");
-    const path = 'http://localhost:8080/files/';
 
     let params = useParams();
     let gatheringId = params.gatheringId;
@@ -34,7 +34,8 @@ function GatheringUpdate() {
 
     const fetchGathering = () => {
         console.log(gatheringId);
-        axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+        ApiClient.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+        // axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
             .then((response) => {
                 console.log(response.data);
                 const gathering = response.data;
@@ -50,8 +51,7 @@ function GatheringUpdate() {
                 setCapacity(gathering.capacity);
                 setEtc(gathering.etc);
                 setImage(gathering.image);
-                console.log(path + gathering.image);
-                setImageUrl(path + gathering.image);
+                imageRef.current.src = gathering.image;
             })
     };
 
@@ -87,9 +87,6 @@ function GatheringUpdate() {
         }
     }
 
-    const handleLocationChange = (e) => {
-        setLocation(e.target.value);
-    }
 
     const handleSubAddressChange = (e) => {
         setAddressObj(prevState => ({
@@ -119,7 +116,6 @@ function GatheringUpdate() {
         formData.append("title", title);
         formData.append("intro", intro);
         formData.append("image", image);
-        // formData.append("location", location);
         formData.append("zoneCode", addressObj.zoneCode);
         formData.append("fullAddress", addressObj.fullAddress);
         formData.append("subAddress", addressObj.subAddress);
@@ -128,7 +124,8 @@ function GatheringUpdate() {
         formData.append("capacity", capacity);
         formData.append("etc", etc);
 
-        const response = await axios.put(`http://localhost:8080/api/gathering/${gatheringId}`, formData, config)
+        const response = await ApiClient.put(`http://localhost:8080/api/gathering/${gatheringId}`, formData, config)
+        // const response = await axios.put(`http://localhost:8080/api/gathering/${gatheringId}`, formData, config)
             .then((response) => {
                 console.log("success");
                 console.log(response);

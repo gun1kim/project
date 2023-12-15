@@ -1,11 +1,11 @@
 package com.example.practice.jwt;
 
 import com.example.practice.dto.TokenDto;
+import com.example.practice.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -31,17 +32,22 @@ public class TokenProvider{
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;
 
     private final Key key;
+//    private MemberRepository memberRepository;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey) {
+    public TokenProvider(@Value("${jwt.secret}") String secretKey, CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+//        this.memberRepository = memberRepository;
+//        customUserDetailsService = new CustomUserDetailsService(memberRepository);
     }
 
     public TokenDto generateTokenDto(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
+        log.info("authentication = {}", authentication);
         long now = (new Date()).getTime();
 
         Date accessTokenExpiresIn = new Date(now +ACCESS_TOKEN_EXPIRE_TIME);
@@ -66,20 +72,27 @@ public class TokenProvider{
     }
 
     public Authentication getAuthentication(String accessToken) {
+
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰");
+        if (claims.getSubject() == null || claims.getSubject().isEmpty()) {
+            throw new RuntimeException("토큰에 사용자 이름이 없습니다.");
         }
 
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        Collection<? extends GrantedAuthority> authorities = Collections.emptyList();
 
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        if (claims.get(AUTHORITIES_KEY) != null) {
+            authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+        }
+//        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(claims.getSubject());
+        log.info("userDetails = {}", userDetails);
+        return new UsernamePasswordAuthenticationToken(userDetails, accessToken, userDetails.getAuthorities());
+//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 
     }
 
@@ -106,6 +119,12 @@ public class TokenProvider{
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public boolean isTokenExpired(String token) {
+        Claims claims = parseClaims(token);
+        Date expiration = claims.getExpiration();
+        return expiration.before(new Date());
     }
 
 }

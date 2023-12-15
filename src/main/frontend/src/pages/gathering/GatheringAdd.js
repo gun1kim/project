@@ -4,7 +4,7 @@ import { useState, useRef} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Post from "../../components/Post";
-
+import ApiClient from "../../components/ApiClient";
 function GatheringAdd() {
 
     const [title, setTitle] = useState("");
@@ -51,9 +51,6 @@ function GatheringAdd() {
         }
     }
 
-    const handleLocationChange = (e) => {
-        setLocation(e.target.value);
-    }
 
     const handleSubAddressChange = (e) => {
         setAddressObj(prevState => ({
@@ -80,6 +77,7 @@ function GatheringAdd() {
 
     const handleSubmit = async () => {
         const formData = new FormData();
+        formData.append('creatorId', Number(localStorage.getItem('memberId')))
         formData.append("title", title);
         formData.append("intro", intro);
         formData.append("image", image);
@@ -91,7 +89,8 @@ function GatheringAdd() {
         formData.append("startAt", startAt);
         formData.append("etc", etc);
 
-        const response = await axios.post('http://localhost:8080/api/gathering', formData, config)
+        const response = await ApiClient.post('http://localhost:8080/api/gathering', formData, config)
+        // const response = await axios.post('http://localhost:8080/api/gathering', formData, config)
             .then((response) => {
                 console.log("success");
                 console.log(response);

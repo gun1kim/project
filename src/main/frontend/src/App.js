@@ -11,7 +11,7 @@ import Join from './pages/member/Join';
 import Login from './pages/member/Login';
 import { RecoilRoot } from 'recoil';
 import { AccessTokenProvider } from './context/AccessTokenContext';
-
+// import MemberContext from './context/MemberContext';
 function App() {
 
     useEffect(() => {
@@ -24,6 +24,7 @@ function App() {
     
   return (
     <RecoilRoot>
+            
       <BrowserRouter>
           <Routes>
               <Route path="/gathering" element={<GatheringList />}></Route>
@@ -34,10 +35,9 @@ function App() {
               <Route path="/mission-detail" element={<MissionDetail />}></Route>
               <Route path="/member/join" element={<Join />}></Route>
               <Route path="/member/login" element={<AccessTokenProvider><Login /></AccessTokenProvider>}></Route>
-
           </Routes>
       </BrowserRouter>
-      </RecoilRoot>
+       </RecoilRoot>
   );
 }
 

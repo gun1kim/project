@@ -39,7 +39,7 @@ public class Gathering {
     @Column
     private String image;
 
-    @Column(columnDefinition = "VARCHAR(10)")
+    @Column(columnDefinition = "VARCHAR(10) 'OPEN'")
     @Enumerated(EnumType.STRING)
     private Status status = Status.OPEN;
 
@@ -49,7 +49,7 @@ public class Gathering {
     private int capacity;
 
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "DATETIME default LocalDateTime.now()")
     private LocalDateTime createAt = LocalDateTime.now();
 
     private LocalDateTime deadline;

@@ -45,7 +45,7 @@ public class GatheringUpdateDto {
         gathering.setIntro(this.intro);
         gathering.setEtc(this.etc);
         gathering.setLocation(address);
-        gathering.setImage(this.image.getOriginalFilename());
+//        gathering.setImage(this.image.getOriginalFilename());
         gathering.setDeadline(this.deadline);
         gathering.setStartAt(this.startAt);
         gathering.setCapacity(this.capacity);

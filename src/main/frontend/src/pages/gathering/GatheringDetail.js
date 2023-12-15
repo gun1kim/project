@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import "../../styles/gathering/GatheringDetail.css";
 import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import ApiClient from "../../components/ApiClient";
 
 function GatheringDetail() {
 
@@ -10,24 +11,56 @@ function GatheringDetail() {
     let gatheringId = params.gatheringId;
     const [gathering, setGathering] = useState();
     const navigate = useNavigate();
-    const [participants, setParticipants] = useState([]);
+    // const [participants, setParticipants] = useState([]);
+    // const [memberId, setMemberId] = useState();
+    const memberId = localStorage.getItem('memberId');
+
 
     const fetchData = () => {
-        axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+        // axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+        ApiClient.get(`http://localhost:8080/api/gathering/${gatheringId}`)
             .then((response) => {
                 setGathering(response.data);
-
+                
             })
             .catch((error) => {
                 console.log('Error fetching data from API: ', error);
             });
     };
 
-    useEffect(() => {
-        fetchData();
+    const fetchMember = () => {
+        ApiClient.get(`http://localhost:8080/api/member/me`)
+        .then((response) => {
+            // setMemberId(response.data.username);
+        })
+        .catch((error) => {
+            console.log('Error fetching member data from API:' + error);
+        })
+    }
 
+    // const fetchGatheringMembers = () => {
+    //     ApiClient.get(`http://localhost:8080/api/membergatherings/gathering/${gatheringId}/members`)
+    //     .then((response) => {
+    //         console.log(response);
+    //     })
+    //     .catch((error) => {
+    //         console.log('Error fetching GatheringMembers API: ', error);
+    //     })
+    // }
+
+    useEffect(() => {
+        fetchMember();
+        // fetchGatheringMembers();
+    }, [])
+
+    useEffect(() => { 
+        fetchData();
     }, [gatheringId])
 
+    useEffect(() => {
+        console.log(gathering)
+        // console.log(gathering.participants);
+    },[gathering])
     // useEffect(() => {
     //     fetchData();
     //     console.log(gathering);
@@ -37,11 +70,15 @@ function GatheringDetail() {
     // }, [gatheringId, gathering])
 
 
-    const deleted = axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+    const deleted = 
+    // axios.get(`http://localhost:8080/api/gathering/${gatheringId}`)
+    ApiClient.get(`http://localhost:8080/api/gathering/${gatheringId}`)
         .catch(error => console.log(error));
+
     const deleteButton = async () => {
-        await axios.delete(`http://localhost:8080/api/gathering/${gatheringId}`)
-            .then((response) => {
+        // await axios.delete(`http://localhost:8080/api/gathering/${gatheringId}`)
+        await ApiClient.delete(`http://localhost:8080/api/gathering/${gatheringId}`)
+        .then((response) => {
                 console.log("delete success");
                 navigate('/gathering');
             })
@@ -52,7 +89,8 @@ function GatheringDetail() {
 
     };
     const joinGathering = async () => {
-        await axios.get(`http://localhost:8080/api/usergatherings/users/2/gathering/${gatheringId}`)
+        // await axios.get(`http://localhost:8080/api/usergatherings/users/2/gathering/${gatheringId}`)
+        await ApiClient.get(`http://localhost:8080/api/membergatherings/members/${memberId}/gathering/${gatheringId}`)
             .then((response) => {
                 console.log("join success")
                 alert('모임 참여에 성공했습니다');
@@ -107,7 +145,7 @@ function GatheringDetail() {
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/nature-3289812-1920-2.png"
                             />
                             <div className="detail-main-writer">
-                                <div className="detail-writer">{gathering && gathering.creatorName}</div>
+                                <div className="detail-writer">{gathering ? gathering.creatorName : "Loading..."}</div>
                                 <div className="detail-title">{gathering ? gathering.title : "Loading..."}</div>
                             </div>
                             <div className="detail-main-content">
@@ -142,8 +180,13 @@ function GatheringDetail() {
                                     src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/detail-main-check-plus.svg"
                                 />
                                 <p className="detail-main-check-2">함께 할 멤버들을 먼저 확인하고 참여해 보세요!</p>
+                                        {/* {gathering && gathering.participants.map(participant => {
+                                            return <li key={participant.memberId}>{participant.id}</li>
+                                        })}
+                                        <p>님이 함께 하고 있어요.</p> */}
                                 <div className="detail-main-check-wrapper">
                                     <div className="detail-main-check-3">확인하기</div>
+                                    
                                 </div>
                             </div>
                             <div className="detail-main-info">
@@ -168,10 +211,12 @@ function GatheringDetail() {
                                     <div className="detail-blank" />
                                     <div className="detail-buttons">
                                         <div className="detail-update-button">
-                                            <div className="text-wrapper-update"><Link to={`/gathering/update/${gatheringId}`}>수정</Link></div>
+                                            {/* <div className="text-wrapper-update"><Link to={`/gathering/update/${gatheringId}`}>수정</Link></div> */}
+                                            <button className="text-wrapper-update" disabled={!gathering || (gathering.creatorId != memberId)} onClick={() => navigate(`/gathering/update/${gatheringId}`)}>수정</button>
                                         </div>
                                         <div className="detail-delete-button">
-                                            <button className="text-wrapper-delete" onClick={deleteButton}>삭제</button>
+                                            <button className="text-wrapper-delete" disabled={!gathering || (gathering.creatorId != memberId)} onClick={deleteButton}>삭제</button>
+                                            {/* <button className="text-wrapper-delete" onClick={deleteButton}>삭제</button> */}
                                         </div>
                                     </div>
                                 </div>

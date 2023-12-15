@@ -4,6 +4,7 @@ import com.example.practice.dto.member.MemberGatheringDto;
 import com.example.practice.entity.Address;
 import com.example.practice.entity.Gathering;
 import com.example.practice.entity.Member;
+import com.example.practice.entity.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,12 +47,15 @@ public class GatheringCreateDto {
                 .creator(creator)
                 .title(title)
                 .intro(intro)
+                .status(Status.OPEN)
                 .etc(etc)
                 .location(address)
                 .capacity(capacity)
                 .image(image.getOriginalFilename())
                 .deadline(deadline)
                 .startAt(startAt)
+                .count(1)
+                .createAt(LocalDateTime.now())
                 .build();
 
     }

@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @Slf4j
-public class GatherController {
+public class GatheringController {
 
     @Value("C:/Users/kki/file/")
     private String fileDir;
@@ -68,19 +68,20 @@ public class GatherController {
 
     @PostMapping("/gathering")
     public ResponseEntity<Resource> gatheringAdd(@ModelAttribute GatheringCreateDto gatheringCreateDto) throws IOException {
+        log.info("id = {}", gatheringCreateDto.getCreatorId());
         Gathering gathering = new Gathering();
         String imageName = saveFile(gatheringCreateDto.getImage());
         gathering.setImage(imageName);
-//        gathering.setLocation(new Address(gatheringCreateDto.getZoneCode(), gatheringCreateDto.getFullAddress(), gatheringCreateDto.getSubAddress()));
-        Long creatorId = 1L;
 
-        gatheringService.addGathering(gatheringCreateDto, creatorId);
+        gatheringService.addGathering(gatheringCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/gathering/{gatheringId}")
     public void gatheringModify(@PathVariable Long gatheringId, @ModelAttribute GatheringUpdateDto gatheringUpdateDto) throws IOException {
+        Gathering gathering = gatheringService.findGatheringById(gatheringId);;
         String imageName = saveFile(gatheringUpdateDto.getImage());
+        gathering.setImage(imageName);
         gatheringService.modifyGathering(gatheringId, gatheringUpdateDto);
     }
 

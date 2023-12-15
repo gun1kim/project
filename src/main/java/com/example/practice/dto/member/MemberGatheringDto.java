@@ -11,13 +11,13 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MemberGatheringDto {
-    private Long memberGatheringId;
+//    private Long memberGatheringId;
     private Long memberId;
     private Long gatheringId;
 
     public MemberGathering toEntity(Member member, Gathering gathering) {
         return MemberGathering.builder()
-                .memberGatheringId(memberGatheringId)
+//                .memberGatheringId(memberGatheringId)
                 .member(member)
                 .gathering(gathering)
                 .build();
@@ -25,7 +25,7 @@ public class MemberGatheringDto {
 
     public static MemberGatheringDto fromEntity(MemberGathering memberGathering) {
         return MemberGatheringDto.builder()
-                .memberGatheringId(memberGathering.getMemberGatheringId())
+//                .memberGatheringId(memberGathering.getMemberGatheringId())
                 .memberId(memberGathering.getMember().getMemberId())
                 .gatheringId(memberGathering.getGathering().getGatheringId())
                 .build();

@@ -1,15 +1,16 @@
 import '../../styles/member/Login.css';
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import {useState} from "react";
+import {useState, useContext} from "react";
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import {loginState} from "../../store/recoilState";
 import useAccessToken from "../../hooks/useAccessToken";
-
+import ApiClient from '../../components/ApiClient';
 function Login() {
     const navigate = useNavigate();
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
+    // const { setMemberId } = useContext(MemberContext);
 
     const [isIdEntered, setIsIdEntered] = useState(true);
     const [isPasswordEntered, setIsPasswordEntered] = useState(true);
@@ -38,19 +39,32 @@ function Login() {
             const loginInfo = {id, password};
             console.log(loginInfo);
 
-            axios.post(`http://localhost:8080/api/member/login`, loginInfo, {withCredentials: true})
-                .then(function (res) {
+            ApiClient.post(`/member/login`, loginInfo, {withCredentials: true})
+            // axios.post(`http://localhost:8080/api/member/login`, loginInfo, {withCredentials: true})
+                .then(async function (res) {
                     // console.log("postData : " + JSON.stringify(res.data));
+                    console.log(res)
 
-                    const { accessToken } = res.data;
+                    const { accessToken, refreshToken } = res.data;
                     const { grantType } = res.data;
+                
                     axios.defaults.headers.common["Authorization"] = `${grantType} ${accessToken}`;
                     // console.log("accessToken : " + accessToken);
                     // console.log("Authorization header: ", axios.defaults.headers.common["Authorization"]);
                     if (accessToken) {
-                        setAccessToken(accessToken);
-                        localStorage.setItem('login-token', accessToken);
+                        await setAccessToken(accessToken);
+                        localStorage.setItem('access-token', accessToken);
+                        localStorage.setItem('refresh-token', refreshToken)
                         setLogin(true);
+                        try {
+                            const MemberInfoResponse = await ApiClient.get('/member/me');
+
+                            
+                            localStorage.setItem('memberId', MemberInfoResponse.data.memberId);
+                            console.log(MemberInfoResponse); 
+                        } catch (error) {
+                            console.log("사용자 정보 조회 실패: " , error)
+                        }
                     } else {
                         setLogin(false);
                     }
@@ -83,6 +97,7 @@ function Login() {
                                         src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656f39b816e4b95e9e1c32c1/img/eco-connect-logo.png"
                                     />
                                 </Link>
+                                
                             </div>
                         </div>
                     </div>

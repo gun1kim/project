@@ -1,10 +1,12 @@
 package com.example.practice.service;
 
 import com.example.practice.entity.Member;
+import com.example.practice.jwt.CustomMemberDetails;
 import com.example.practice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,27 +26,32 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findMemberById(username)
-//                .map(user -> createUser(username, user))
-                .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(username + "-> 데이터베이스에서 찾을 수 없습니다."));
-    }
+        Member member = memberRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+        CustomMemberDetails details = new CustomMemberDetails(member);
+        return details;
 
-    private org.springframework.security.core.userdetails.User createUser(String username, Member user) {
+//        return memberRepository.findById(username)
+////                .map(user -> createUser(username, user))
+//                .map(this::createUserDetails)
+//                .orElseThrow(() -> new UsernameNotFoundException(username + "-> 데이터베이스에서 찾을 수 없습니다."));
 
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), grantedAuthorities);
+
     }
 
     private UserDetails createUserDetails(Member member) {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().toString());
-
-        return new org.springframework.security.core.userdetails.User(
+        return new User(
+//                String.valueOf(member.getId()),
                 member.getId(),
                 member.getPassword(),
                 Collections.singleton(grantedAuthority)
         );
+
     }
+
+    private Member getMember(String id) {
+        return memberRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException(id + "-> not found"));
+    }
+
+
 }

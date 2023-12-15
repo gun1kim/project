@@ -4,6 +4,8 @@ import {useState, useEffect} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import { useLocation, useSearchParams } from "react-router-dom";
+import ApiClient from "../../components/ApiClient";
+import LogoutButton from "../member/LogoutButton";
 
 function GatheringList() {
 
@@ -17,10 +19,13 @@ function GatheringList() {
     const [searchParams, setSearchParams] = useSearchParams();
     const loaction = useLocation();
 
+    const [memberId, setMemberId] = useState();
+
 
 
     const fetchData = () => {
-        axios.get(`http://localhost:8080/api/gathering?page=${page}`)
+        ApiClient.get(`/gathering?page=${page}`)
+        // axios.get(`http://localhost:8080/api/gathering?page=${page}`)
             .then((response) => {
                 console.log(response.data);
                 setLists(response.data.content);
@@ -32,7 +37,8 @@ function GatheringList() {
     };
 
     const fetchDataByStatus = () => {
-        axios.get(`http://localhost:8080/api/gathering/status?status=${status}`)
+        ApiClient.get(`/gathering/status?status=${status}`)
+        // axios.get(`http://localhost:8080/api/gathering/status?status=${status}`)
         .then((response) => {
             setLists(response.data.content);
             setTotalPages(response.data.totalPages);
@@ -44,7 +50,8 @@ function GatheringList() {
 
     const fetchDataByTitle = () => {
         const encodedTitle = encodeURIComponent(title);
-        axios.get(`http://localhost:8080/api/gathering/title?title=${encodedTitle}`)
+        ApiClient.get(`/gathering/title?title=${encodedTitle}`)
+        // axios.get(`http://localhost:8080/api/gathering/title?title=${encodedTitle}`)
         .then((response) => {
             setLists(response.data.content);
             setTotalPages(response.data.totalPages);
@@ -67,7 +74,7 @@ function GatheringList() {
         const pageFromUrl = searchParams.get('page');
         const statusFromUrl = searchParams.get('status');
         const titleFromUrl = searchParams.get('title');
-
+        
         if (pageFromUrl !== null) {
             setPage(parseInt(pageFromUrl));
         }
@@ -121,6 +128,7 @@ function GatheringList() {
                             />
                         </div>
                     </div>
+                    <LogoutButton />
                     <div className="header-menu-wrap">
                         <div className="header-mission-wrap">
                             <div className="text-wrapper">봉사미션</div>

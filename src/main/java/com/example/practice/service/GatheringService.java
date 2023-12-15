@@ -54,7 +54,40 @@ public class GatheringService {
         return gatheringRepository.findByTitleLike("%" + title + "%", pageable);
     }
 
+    public void addGathering(GatheringCreateDto gatheringCreateDto) {
+        Member creator = memberRepository.findById(gatheringCreateDto.getCreatorId()).orElseThrow(() -> new IllegalArgumentException("user not found with id: " + gatheringCreateDto.getCreatorId()));
 
+        String filepath = "images/gathering";
+        String imageUrl = s3FileUploader.uploadFileToS3(gatheringCreateDto.getImage(), filepath);
+
+        Address address = new Address(gatheringCreateDto.getZoneCode(), gatheringCreateDto.getFullAddress(), gatheringCreateDto.getSubAddress());
+        Gathering gathering = gatheringCreateDto.toEntity(creator);
+        gathering.setLocation(address);
+        gathering.setImage(imageUrl);
+//        Gathering gathering = new Gathering();
+
+//        gathering.setTitle(gatheringCreateDto.getTitle());
+//        gathering.setIntro(gatheringCreateDto.getIntro());
+//        gathering.setEtc(gatheringCreateDto.getEtc());
+//        gathering.setLocation(address);
+//        gathering.setImage(imageUrl);
+//        gathering.setCapacity(gatheringCreateDto.getCapacity());
+
+        if (gatheringCreateDto.getDeadline().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("모집 마감일은 오늘 날짜보다 작은 값으로는 설정 할 수 없습니다.");
+        }
+        if (gatheringCreateDto.getStartAt().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("모임 시작일은 오늘 날짜보다 작은 값으로는 설정 할 수 없습니다.");
+        }
+
+//        gathering.setDeadline(gatheringCreateDto.getDeadline());
+//        gathering.setStartAt(gatheringCreateDto.getStartAt());
+//
+//        gathering.setCreator(creator);  // Set the creator of the gathering
+        creator.getCreateGatherings().add(gathering); // Add the gathering to the user's createdGatherings list
+
+        gatheringRepository.save(gathering);
+    }
 
     public void addGathering(GatheringCreateDto gatheringCreateDto, Long creatorId) {  // Add creatorId parameter
         Member creator = memberRepository.findById(creatorId)  // Load the user from the database
@@ -91,7 +124,9 @@ public class GatheringService {
 
     public void modifyGathering(Long gatheringId, GatheringUpdateDto gatheringUpdateDto) {
         Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such gathering"));
-
+        String filePath = "images/gathering";
+        String imageUrl = s3FileUploader.uploadFileToS3(gatheringUpdateDto.getImage(), filePath);
+        gathering.setImage(imageUrl);
         if (gatheringUpdateDto.getDeadline().isBefore(LocalDateTime.now())) {
             new IllegalArgumentException("모집 마감일은 오늘 날짜보다 작은 값으로는 설정 할 수 없습니다.");
         }
