@@ -65,11 +65,11 @@ public class AuthController {
 
     @GetMapping("/member/me")
     public ResponseEntity<?> getMe(@AuthenticationPrincipal CustomMemberDetails memberDetails) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("userDetail ={}", memberDetails);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("userDetail = {}", memberDetails);
 //        log.info("authentication = {}", authentication);
 //        log.info("authentication.getPrincipal() = {}", authentication.getPrincipal());
-        return ResponseEntity.ok(authentication.getPrincipal());
+        return ResponseEntity.ok(memberDetails);
     }
 
 //    @DeleteMapping("/member/logout")

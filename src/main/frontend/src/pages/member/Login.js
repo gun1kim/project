@@ -58,9 +58,6 @@ function Login() {
                         setLogin(true);
                         try {
                             const MemberInfoResponse = await ApiClient.get('/member/me');
-
-                            
-                            localStorage.setItem('memberId', MemberInfoResponse.data.memberId);
                             console.log(MemberInfoResponse); 
                         } catch (error) {
                             console.log("사용자 정보 조회 실패: " , error)

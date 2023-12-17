@@ -1,6 +1,6 @@
 import "../../styles/gathering/GatheringAdd.css";
 import React from "react";
-import { useState, useRef} from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Post from "../../components/Post";
@@ -22,7 +22,7 @@ function GatheringAdd() {
     const localDateTime = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     const [deadline, setDeadline] = useState(localDateTime);
     const [startAt, setStartAt] = useState(localDateTime)
-
+    const [memberId, setMemberId] = useState();
     const navigate = useNavigate();
 
     const imageInputRef = useRef();
@@ -51,6 +51,18 @@ function GatheringAdd() {
         }
     }
 
+    const fetchMember = () => {
+        ApiClient.get('/member/me')
+        .then((response) => {
+            setMemberId(response.data.memberId);
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log('error fetching member data API: ',error);
+        })
+    }
+
 
     const handleSubAddressChange = (e) => {
         setAddressObj(prevState => ({
@@ -77,7 +89,7 @@ function GatheringAdd() {
 
     const handleSubmit = async () => {
         const formData = new FormData();
-        formData.append('creatorId', Number(localStorage.getItem('memberId')))
+        formData.append('creatorId', memberId);
         formData.append("title", title);
         formData.append("intro", intro);
         formData.append("image", image);
@@ -101,8 +113,11 @@ function GatheringAdd() {
                 console.log(error);
             })
 
-
     }
+
+    useEffect(() => {
+        fetchMember();
+    }, [])
 
     return (
         <div className="gathering-add-index">

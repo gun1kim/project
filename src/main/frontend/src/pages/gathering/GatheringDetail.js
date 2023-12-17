@@ -12,8 +12,8 @@ function GatheringDetail() {
     const [gathering, setGathering] = useState();
     const navigate = useNavigate();
     // const [participants, setParticipants] = useState([]);
-    // const [memberId, setMemberId] = useState();
-    const memberId = localStorage.getItem('memberId');
+    const [memberId, setMemberId] = useState();
+    const [memberName, setMemberName] = useState("");
 
 
     const fetchData = () => {
@@ -31,6 +31,9 @@ function GatheringDetail() {
     const fetchMember = () => {
         ApiClient.get(`http://localhost:8080/api/member/me`)
         .then((response) => {
+            console.log(response);
+            setMemberId(response.data.memberId);
+            setMemberName(response.data.username);
             // setMemberId(response.data.username);
         })
         .catch((error) => {
@@ -58,9 +61,11 @@ function GatheringDetail() {
     }, [gatheringId])
 
     useEffect(() => {
-        console.log(gathering)
-        // console.log(gathering.participants);
+
     },[gathering])
+    useEffect(() => {
+        console.log(memberId, memberName)
+    }, [memberId, memberName])
     // useEffect(() => {
     //     fetchData();
     //     console.log(gathering);
@@ -145,7 +150,7 @@ function GatheringDetail() {
                                 src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656794b954eecaa3161d736b/img/nature-3289812-1920-2.png"
                             />
                             <div className="detail-main-writer">
-                                <div className="detail-writer">{gathering ? gathering.creatorName : "Loading..."}</div>
+                                <div className="detail-writer">{memberName ? memberName : "Loading..."}</div>
                                 <div className="detail-title">{gathering ? gathering.title : "Loading..."}</div>
                             </div>
                             <div className="detail-main-content">
