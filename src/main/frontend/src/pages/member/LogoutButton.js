@@ -6,7 +6,7 @@ function LogoutButton() {
     const logout = () => {
         const accessToken = localStorage.getItem('access-token')
         const refreshToken = localStorage.getItem('refresh-token');
-        axios.delete('http://localhost:8080/api/member/logout', {
+        axios.delete('http://localhost:8080/api/members/logout', {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
                 'x-refresh-token': refreshToken
@@ -23,7 +23,7 @@ function LogoutButton() {
         localStorage.removeItem('refresh-token');
         localStorage.removeItem('memberId');
         // window.location.href="/member/login";
-        navigate("/member/login");
+        navigate("/members/login");
         
 
     }

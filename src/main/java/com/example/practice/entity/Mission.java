@@ -23,11 +23,14 @@ public class Mission {
     private String title;
 
     private String description; // 미션설명
+    private int point; // 미션 완료시 획득 포인트
 
     private LocalDateTime createAt = LocalDateTime.now();
     private LocalDateTime modifyAt;
 
-    private Status status; // 참여가능, 참여마감, 종료
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.OPEN; // 참여가능, 참여마감, 종료
 
     @Embedded
     private Address address;
@@ -46,6 +49,10 @@ public class Mission {
     @OneToMany(mappedBy = "mission")
     private List<MissionLike> likes = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        this.createAt = LocalDateTime.now();
+    }
     @PreUpdate
     public void onUpdate() {
         this.modifyAt = LocalDateTime.now();
@@ -53,5 +60,10 @@ public class Mission {
 
     public int getLikesCount() {
         return likes.size();
+    }
+
+    public void addMemberMission(MemberMission memberMission) {
+        this.memberMissions.add(memberMission);
+        memberMission.setMission(this);
     }
 }

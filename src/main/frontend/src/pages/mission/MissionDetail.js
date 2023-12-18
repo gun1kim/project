@@ -1,7 +1,38 @@
 // import "./MissionDetail.css";
 import "../../styles/mission/MissionDetail.css";
-import React from "react";
+import React, {useState, useEffect} from "react";
+import ApiClient from "../../components/ApiClient";
+import { useParams } from "react-router-dom";
 function MissionDetail() {
+  let params = useParams();
+  let missionId = params.missionId;
+  const [mission, setMission] = useState();
+  
+  function prettyDate() { 
+    const startDate = new Date(mission.startAt);
+    const endDate = new Date(mission.endAt);
+
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
+
+    const prettyStartDate = startDate.toLocaleDateString('ko-KR', options) + ' ' + startDate.toLocaleTimeString('ko-KR');
+    const prettyEndDate = endDate.toLocaleDateString('ko-KR', options) +  ' ' + endDate.toLocaleTimeString('ko-KR');
+    const result = `${prettyStartDate} ~ ${prettyEndDate}`;
+    return result;
+  }
+ 
+  useEffect(() => {
+    
+    console.log(missionId);
+    ApiClient.get(`/missions/${missionId}`)
+    .then((response) => {
+      console.log(response);
+      setMission(response.data);
+    })
+  }, [])
+
+  useEffect(() => {
+    console.log(mission)
+  }, [mission])
 
     return (
         <div className="mission-detail-index">
@@ -66,19 +97,19 @@ function MissionDetail() {
           </div>
           <div className="mission-detail-info">
             <div className="div-wrapper-2">
-              <div className="mission-detail">쓰레기를 줏어서 쓰레기통에 버려주세요!</div>
+              <div className="mission-detail">{mission ? mission.title : "Loading..."}</div>
             </div>
             <div className="div-wrapper-2">
-              <p className="mission-detail-get">흭득가능 포인트 : 10 P</p>
+              <p className="mission-detail-get">흭득가능 포인트 : {mission ? mission.point : "Loading..."} P</p>
             </div>
             <div className="div-wrapper-2">
-              <div className="mission-detail-host">개최자: 성남시청</div>
+              <div className="mission-detail-host">개최자: {mission ? mission.host : "Loading..."}</div>
             </div>
             <div className="div-wrapper-2">
-              <div className="mission-detail-2">미션장소: 성남시 전체</div>
+              <div className="mission-detail-2">미션장소: {mission ? `${mission.fullAddress} ${mission.subAddress}` : "Loading..."}</div>
             </div>
             <div className="div-wrapper-2">
-              <div className="mission-detail-date">미션일시 오늘~내일</div>
+              <div className="mission-detail-date">미션일시 {mission ? prettyDate() : "Loading..."}</div>
             </div>
             <div className="mission-detail-wrapper">
               <div className="mission-detail-3">도전하기</div>

@@ -17,7 +17,7 @@ ApiClient.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         // return axios.post('/member/reissue',)
-        return axios.post('http://localhost:8080/api/member/reissue', {
+        return axios.post('http://localhost:8080/api/members/reissue', {
             accessToken: localStorage.getItem('access-token'),
             refreshToken: localStorage.getItem('refresh-token')
         }, { 

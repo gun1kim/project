@@ -31,10 +31,10 @@ function App() {
               <Route path="/gathering/:gatheringId" element={<GatheringDetail />}></Route>
               <Route path="/gathering/add" element={<GatheringAdd />}></Route>
               <Route path="/gathering/update/:gatheringId" element={<GatheringUpdate />}></Route>
-              <Route path="/mission" element={<MissionList />}></Route>
-              <Route path="/mission-detail" element={<MissionDetail />}></Route>
-              <Route path="/member/join" element={<Join />}></Route>
-              <Route path="/member/login" element={<AccessTokenProvider><Login /></AccessTokenProvider>}></Route>
+              <Route path="/missions" element={<MissionList />}></Route>
+              <Route path="/missions/:missionId" element={<MissionDetail />}></Route>
+              <Route path="/members/join" element={<Join />}></Route>
+              <Route path="/members/login" element={<AccessTokenProvider><Login /></AccessTokenProvider>}></Route>
           </Routes>
       </BrowserRouter>
        </RecoilRoot>

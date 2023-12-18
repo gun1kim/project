@@ -14,36 +14,36 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/members")
+    @GetMapping("")
     public List<Member> getAllMembers() {
         List<Member> list = memberService.getAllMember();
         return list;
     }
 
-    @GetMapping("/members/{memberId}")
+    @GetMapping("/{memberId}")
     public Member getMemberById(@PathVariable Long memberId) {
         Member member = memberService.getMemberById(memberId);
         return member;
     }
-    @PostMapping("/members/new")
+    @PostMapping("/new")
     public void addMember(@RequestBody Member member) {
         memberService.createMember(member);
     }
 
 
-    @DeleteMapping("/members/{memberId}")
+    @DeleteMapping("/{memberId}")
     public void removeMemberById(@PathVariable Long memberId) {
         memberService.removeMemberById(memberId);
     }
 
-    @GetMapping("/members/{memberId}/gatherings")
+    @GetMapping("/{memberId}/gatherings")
     public List<Gathering> getMemberGatherings(@PathVariable Long memberId) {
         Member member = memberService.getMemberById(memberId);
         List<MemberGathering> memberGatherings = member.getMemberGatherings();
@@ -56,12 +56,12 @@ public class MemberController {
         return gatherings;
     }
 
-    @PostMapping("/member/find-id")
+    @PostMapping("//find-id")
     public Boolean memberDuplicateIdFind(@RequestBody Map<String, String> idMap) {
         return memberService.findIdDuplicateMember(idMap.get("id"));
     }
 
-    @PostMapping("/member/find-email")
+    @PostMapping("/find-email")
     public Boolean memberDuplicateEmailFind(@RequestBody Map<String, String> emailMap) {
         return memberService.findEmailDuplicateMember(emailMap.get("email"));
     }

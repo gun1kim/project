@@ -30,6 +30,7 @@ public class MissionUpdateDto {
         Address address = new Address(zoneCode, fullAddress, subAddress);
         mission.setTitle(title);
         mission.setDescription(description);
+        mission.setPoint(point);
         mission.setStartAt(startAt);
         mission.setEndAt(endAt);
         mission.setDeadline(deadline);

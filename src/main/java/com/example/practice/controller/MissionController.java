@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/missions")
 public class MissionController {
 
     private final MissionService missionService;
@@ -20,29 +20,29 @@ public class MissionController {
 //        return missionService.findAll();
 //    }
 
-    @GetMapping("/missions")
+    @GetMapping
     public Page<MissionDto> missionList(@PageableDefault(size = 8) Pageable pageable) {
         return missionService.findAllMissions(pageable);
     }
 
-    @GetMapping("/missions/{missionId}")
-    public MissionDto missionDetails(@PathVariable Long id) {
-        return missionService.findById(id);
+    @GetMapping("{missionId}")
+    public MissionDto missionDetails(@PathVariable Long missionId) {
+        return missionService.findById(missionId);
     }
 
-    @GetMapping("/missions/status")
+    @GetMapping("/status")
     public Page<MissionDto> missionListByStatus(@RequestParam("status") String status, @PageableDefault(size = 8) Pageable pageable) {
         return missionService.findByStatus(status, pageable);
     }
 
-    @GetMapping("/missions/title")
+    @GetMapping("/title")
     public Page<MissionDto> missionListByTitle(@RequestParam String title, @PageableDefault(size = 8) Pageable pageable) {
         return missionService.findAllByTitleLike(title, pageable);
     }
 
-    @GetMapping("/missions/category")
+    @GetMapping("/category")
     public Page<MissionDto> missionListByCategory(@RequestParam String category, @PageableDefault(size = 8) Pageable pageable) {
-        return missionService.findByCategoryLike(category, pageable);
+        return missionService.findByCategoryLike("%" + category + "%", pageable);
     }
 
 
@@ -53,8 +53,8 @@ public class MissionController {
 //        saveFile(missionCreateDto.getImage());
 //    }
 
-    @DeleteMapping("/missions/{missionId}")
+    @DeleteMapping("/{missionId}")
     public void missionRemove(@PathVariable Long missionId) {
-
+        missionService.removeById(missionId);
     }
 }

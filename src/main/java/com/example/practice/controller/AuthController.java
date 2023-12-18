@@ -30,25 +30,25 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.attribute.UserPrincipal;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 @Slf4j
 public class AuthController {
 
     private final AuthService authService;
     private final MemberService memberService;
-    @PostMapping("/member/join")
+    @PostMapping("/join")
     public ResponseEntity<MemberDto> singUp(@RequestBody MemberCreateDto memberCreateDto) {
         return ResponseEntity.ok(authService.signUp(memberCreateDto));
     }
 
-    @PostMapping("/member/login")
+    @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody MemberLoginDto memberLoginDto) {
 
         return ResponseEntity.ok(authService.login(memberLoginDto));
     }
 
-    @PostMapping("/member/reissue")
+    @PostMapping("/reissue")
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         return ResponseEntity.ok(authService.reissue(tokenRequestDto));
     }
@@ -62,8 +62,7 @@ public class AuthController {
 //        return ResponseEntity.ok(memberDto);
 //
 //    }
-
-    @GetMapping("/member/me")
+    @GetMapping("/me")
     public ResponseEntity<?> getMe(@AuthenticationPrincipal CustomMemberDetails memberDetails) {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("userDetail = {}", memberDetails);
@@ -88,7 +87,7 @@ public class AuthController {
 //        return ResponseEntity.ok().build();
 //    }
 
-    @DeleteMapping("/member/logout")
+    @DeleteMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader(value = "Authorization") String accessToken,
                                     @RequestHeader(value = "x-refresh-token") String refreshToken) {
         String jwt = accessToken.substring(7);

@@ -2,6 +2,7 @@ package com.example.practice.dto.mission;
 
 import com.example.practice.entity.Address;
 import com.example.practice.entity.Mission;
+import com.example.practice.entity.Status;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public class MissionCreateDto {
     private String fullAddress;
     private String subAddress;
 
+    private int point;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
     private LocalDateTime deadline;
@@ -35,8 +37,10 @@ public class MissionCreateDto {
                 .title(title)
                 .description(description)
                 .address(address)
+                .point(point)
                 .startAt(startAt)
                 .endAt(endAt)
+                .status(Status.OPEN)
                 .deadline(deadline)
                 .host(host)
                 .category(category)

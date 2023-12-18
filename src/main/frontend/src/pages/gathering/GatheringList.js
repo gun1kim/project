@@ -27,7 +27,6 @@ function GatheringList() {
         ApiClient.get(`/gathering?page=${page}`)
         // axios.get(`http://localhost:8080/api/gathering?page=${page}`)
             .then((response) => {
-                console.log(response.data);
                 setLists(response.data.content);
                 setTotalPages(response.data.totalPages);
             })
@@ -37,8 +36,25 @@ function GatheringList() {
     };
 
     const fetchDataByStatus = () => {
-        ApiClient.get(`/gathering/status?status=${status}`)
+        if (status !== "") {
+
+        
+        ApiClient.get(`/gathering/status?status=${status}&page=${page}`)
         // axios.get(`http://localhost:8080/api/gathering/status?status=${status}`)
+        .then((response) => {
+            setLists(response.data.content);
+            setTotalPages(response.data.totalPages);
+        })
+        .catch((error) => {
+            console.log('Error fetching data from API: ', error);
+        })
+        }
+    }
+
+    const fetchDataByTitle = () => {
+        const encodedTitle = encodeURIComponent(title);
+        ApiClient.get(`/gathering/title?title=${encodedTitle}&page=${page}`)
+        // axios.get(`http://localhost:8080/api/gathering/title?title=${encodedTitle}`)
         .then((response) => {
             setLists(response.data.content);
             setTotalPages(response.data.totalPages);
@@ -48,17 +64,17 @@ function GatheringList() {
         })
     }
 
-    const fetchDataByTitle = () => {
-        const encodedTitle = encodeURIComponent(title);
-        ApiClient.get(`/gathering/title?title=${encodedTitle}`)
-        // axios.get(`http://localhost:8080/api/gathering/title?title=${encodedTitle}`)
-        .then((response) => {
-            setLists(response.data.content);
-            setTotalPages(response.data.totalPages);
-        })
-        .catch((error) => {
-            console.log('Error fetching data from API: ', error);
-        })
+    const fecthDataByStatusAndTitle = () => {
+        if (status !== "" && title !== "") {
+            ApiClient(`/gathering?status=${status}&title=${encodeURIComponent(title)}&page=${page}`)
+            .then((response) => {
+                setLists(response.data.content);
+                setTotalPages(response.data.totalPages);
+            })
+            .catch((error) => {
+                console.log('Error fetching data from API: ', error);
+            })
+        }
     }
 
 
@@ -87,6 +103,15 @@ function GatheringList() {
 
     }, [])
 
+    useEffect(() => { 
+        setPage(0);
+    }, [status])
+
+    useEffect(() => {
+        setPage(0);
+    }, [title])
+
+
     useEffect(() => {
         searchParams.set('page', page.toString());
         if (status !== null) {
@@ -97,7 +122,11 @@ function GatheringList() {
         }
         setSearchParams(searchParams);
 
-        if (status !== "") {
+        if (status !== "" && title !== "") {
+            fecthDataByStatusAndTitle();
+        }
+
+        else if (status !== "") {
             fetchDataByStatus();
         }
         else if (title !== "") {

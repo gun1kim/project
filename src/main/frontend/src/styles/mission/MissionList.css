@@ -6,11 +6,14 @@
     width: 100%;
   }
   
+  /* display: flex flex-direction: column */
   .mission-list-index .mission-list-wrap-wrapper {
     background-color: #ffffff;
     height: 2500px;
     overflow: hidden;
     width: 1440px;
+    display: flex;
+    flex-direction: column;
   }
   
   .mission-list-index .mission-list-wrap {
@@ -191,6 +194,7 @@
     position: relative;
     text-align: center;
     width: fit-content;
+    cursor: pointer;
   }
   
   .mission-list-index .menu-activity {
@@ -775,14 +779,16 @@
   
   .mission-list-index .mission-list-wrap-2 {
     align-items: center;
-    display: flex;
-    flex: 0 0 auto;
-    flex-direction: column;
+    /* display: flex; */
+    /* flex: 0 0 auto; */
+    /* flex-direction: column; */
     gap: 10px;
     justify-content: center;
     padding: 50px 49px;
     position: relative;
     width: 1292px;
+    display: grid;
+    grid-template-columns: repeat(4, 3fr);
   }
   
   .mission-list-index .mission-list {
@@ -917,7 +923,7 @@
     display: flex;
     height: 35px;
     justify-content: center;
-    opacity: 0.4;
+    /* opacity: 0.4; */
     padding: 4px;
     position: relative;
     width: 25px;
@@ -926,14 +932,14 @@
   .mission-list-index .pagination-left {
     align-items: center;
     display: flex;
-    height: 35px;
+    height: 40px;
     justify-content: center;
     margin-bottom: -4px;
     margin-left: -4px;
     margin-right: -4px;
     margin-top: -4px;
     position: relative;
-    width: 25px;
+    width: 40px;
   }
   
   .mission-list-index .img-3 {
@@ -944,15 +950,15 @@
   
   .mission-list-index .pagination {
     align-items: center;
-    border: 1px solid;
+    border: none;
     border-color: var(--neutral-400);
     border-radius: 5px;
     display: flex;
     gap: 5px;
-    height: 35px;
+    height: 40px;
     justify-content: center;
     position: relative;
-    width: 35px;
+    width: 40px;
   }
   
   .mission-list-index .text-wrapper-5 {
@@ -963,7 +969,8 @@
     letter-spacing: 0;
     line-height: normal;
     position: relative;
-    width: fit-content;
+    width: 40px;
+    height: 40px;
   }
   
   .mission-list-index .pagination-num {
@@ -1008,7 +1015,8 @@
     width: 25px;
   }
   
-  .mission-list-index .footer {
+  /* position: absolute bottom: -2000px정도 주면 제자리로감 */
+  .mission-list-index .footer { 
     align-items: flex-start;
     background-color: #ffffff;
     border-bottom-style: none;
@@ -1027,7 +1035,7 @@
   .mission-list-index .footer-wrap {
     align-items: center;
     display: flex;
-    height: 279px;
+    height: 250px;
     justify-content: center;
     position: relative;
     width: 1440px;
@@ -1048,7 +1056,6 @@
     gap: 40px;
     height: 279px;
     justify-content: center;
-    padding: 126px 0px;
     position: relative;
     width: 650px;
   }
@@ -1101,7 +1108,6 @@
     gap: 30px;
     height: 279px;
     justify-content: center;
-    padding: 111px 43px;
     position: relative;
     width: 400px;
   }

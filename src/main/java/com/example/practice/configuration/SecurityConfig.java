@@ -49,14 +49,14 @@ public class SecurityConfig {
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring()
                 .requestMatchers(new AntPathRequestMatcher("/favicon.ico"),
-                        new AntPathRequestMatcher("/api/member/join"),
+                        new AntPathRequestMatcher("/api/members/join"),
                         new AntPathRequestMatcher("/api/authenticate"),
-                        new AntPathRequestMatcher("/api/member/login"),
+                        new AntPathRequestMatcher("/api/members/login"),
                         new AntPathRequestMatcher("/api/mail/mail-send"),
                         new AntPathRequestMatcher("/api/mail/mail-confirm"),
-                        new AntPathRequestMatcher("/api/member/find-id"),
-                        new AntPathRequestMatcher("/api/member/find-email"),
-                        new AntPathRequestMatcher("/api/member/reissue"));
+                        new AntPathRequestMatcher("/api/members/find-id"),
+                        new AntPathRequestMatcher("/api/members/find-email"),
+                        new AntPathRequestMatcher("/api/members/reissue"));
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -75,13 +75,13 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((registry) ->
                         registry.requestMatchers(
-                                        new AntPathRequestMatcher("/api/member/join"),
+                                        new AntPathRequestMatcher("/api/members/join"),
                                         new AntPathRequestMatcher("/api/authenticate"),
-                                        new AntPathRequestMatcher("/api/member/login"),
+                                        new AntPathRequestMatcher("/api/members/login"),
                                         new AntPathRequestMatcher("/api/mail/mail-send"),
                                         new AntPathRequestMatcher("/api/mail/mail-confirm"),
-                                        new AntPathRequestMatcher("/api/member/find-id"),
-                                        new AntPathRequestMatcher("/api/member/find-email")
+                                        new AntPathRequestMatcher("/api/members/find-id"),
+                                        new AntPathRequestMatcher("/api/members/find-email")
                                 )
                                 .permitAll()
                                 .anyRequest().authenticated()

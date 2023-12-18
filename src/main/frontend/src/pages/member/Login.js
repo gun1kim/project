@@ -39,7 +39,7 @@ function Login() {
             const loginInfo = {id, password};
             console.log(loginInfo);
 
-            ApiClient.post(`/member/login`, loginInfo, {withCredentials: true})
+            ApiClient.post(`/members/login`, loginInfo, {withCredentials: true})
             // axios.post(`http://localhost:8080/api/member/login`, loginInfo, {withCredentials: true})
                 .then(async function (res) {
                     // console.log("postData : " + JSON.stringify(res.data));
@@ -57,7 +57,7 @@ function Login() {
                         localStorage.setItem('refresh-token', refreshToken)
                         setLogin(true);
                         try {
-                            const MemberInfoResponse = await ApiClient.get('/member/me');
+                            const MemberInfoResponse = await ApiClient.get('/members/me');
                             console.log(MemberInfoResponse); 
                         } catch (error) {
                             console.log("사용자 정보 조회 실패: " , error)

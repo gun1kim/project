@@ -60,5 +60,10 @@ public class Member  {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MissionLike> likeMissions = new ArrayList<>();
 
+    // 양빙향 연관관계 설정 메서드
+    public void addMemberMission(MemberMission memberMission) {
+        this.memberMissions.add(memberMission);
+        memberMission.setMember(this);
+    }
 
 }

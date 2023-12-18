@@ -95,7 +95,7 @@ function GatheringDetail() {
     };
     const joinGathering = async () => {
         // await axios.get(`http://localhost:8080/api/usergatherings/users/2/gathering/${gatheringId}`)
-        await ApiClient.get(`http://localhost:8080/api/membergatherings/members/${memberId}/gathering/${gatheringId}`)
+        await ApiClient.get(`http://localhost:8080/api/members/${memberId}/gathering/${gatheringId}/join`)
             .then((response) => {
                 console.log("join success")
                 alert('모임 참여에 성공했습니다');

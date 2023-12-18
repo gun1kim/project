@@ -2,6 +2,7 @@ package com.example.practice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class Gathering {
     @Column
     private String image;
 
-    @Column(columnDefinition = "VARCHAR(10) 'OPEN'")
+    @Column(columnDefinition = "VARCHAR(10) default 'OPEN'")
     @Enumerated(EnumType.STRING)
     private Status status = Status.OPEN;
 
@@ -49,8 +50,9 @@ public class Gathering {
     private int capacity;
 
 
-    @Column(columnDefinition = "DATETIME default LocalDateTime.now()")
-    private LocalDateTime createAt = LocalDateTime.now();
+//    @Column(columnDefinition = "DATETIME default LocalDateTime.now()")
+    @Column
+    private LocalDateTime createAt;
 
     private LocalDateTime deadline;
     private LocalDateTime startAt;
@@ -58,6 +60,10 @@ public class Gathering {
     @OneToMany(mappedBy = "gathering", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<MemberGathering> memberGatherings = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        this.createAt = LocalDateTime.now();
+    }
 
 
 }

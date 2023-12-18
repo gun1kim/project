@@ -5,6 +5,7 @@ import com.example.practice.dto.gathering.GatheringCreateDto;
 import com.example.practice.dto.gathering.GatheringDto;
 import com.example.practice.dto.gathering.GatheringUpdateDto;
 import com.example.practice.dto.member.MemberDto;
+import com.example.practice.jwt.CustomMemberDetails;
 import com.example.practice.service.GatheringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,12 +36,29 @@ public class GatheringController {
 
     private final GatheringService gatheringService;
 
-    @GetMapping("/gathering")
-    public Page<GatheringDto> gatheringList(@PageableDefault(size = 8) Pageable pageable) {
-        Page<Gathering> page = gatheringService.findAllGatherings(pageable);
-        Page<GatheringDto> pageDto = page.map(GatheringDto::fromEntity);
-        return pageDto;
+//    @GetMapping("/gathering")
+//    public Page<GatheringDto> gatheringList(@PageableDefault(size = 8) Pageable pageable) {
+//        Page<Gathering> page = gatheringService.findAllGatherings(pageable);
+//        Page<GatheringDto> pageDto = page.map(GatheringDto::fromEntity);
+//        return pageDto;
+//
+//    }
 
+    @GetMapping("/gathering")
+    public Page<GatheringDto> gatheringList(@RequestParam(required = false) String status, @RequestParam(required = false) String title,
+                                            @PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> gatherings;
+        if (status != null && title != null) {
+            gatherings = gatheringService.findGatheringByStatusAndTitle(status, title, pageable);
+        } else if (status != null) {
+            gatherings = gatheringService.findGatheringByStatus(status, pageable);
+        } else if (title != null) {
+            gatherings = gatheringService.findGatheringByTitle(title, pageable);
+        } else {
+            gatherings = gatheringService.findAllGatherings(pageable);
+        }
+        Page<GatheringDto> gatheringDtos = gatherings.map(GatheringDto::fromEntity);
+        return gatheringDtos;
     }
 
     @GetMapping("/gathering/{gatheringId}")
@@ -63,6 +82,15 @@ public class GatheringController {
         Page<GatheringDto> gatheringDtos = gatherings.map(GatheringDto::fromEntity);
         return gatheringDtos;
     }
+
+    @GetMapping("/gathering/statusAndTitle")
+    public Page<GatheringDto> gatheringListsByStatusAndTitle(@RequestParam(required = false) String status, @RequestParam(required = false) String title,
+                                                             @PageableDefault(size = 8) Pageable pageable) {
+        Page<Gathering> gatherings = gatheringService.findGatheringByStatusAndTitle(status, title, pageable);
+        Page<GatheringDto> gatheringDtos = gatherings.map(GatheringDto::fromEntity);
+        return gatheringDtos;
+    }
+
 
 
 

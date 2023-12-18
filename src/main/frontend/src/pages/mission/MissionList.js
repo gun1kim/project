@@ -1,10 +1,75 @@
 import "../../styles/mission/MissionList.css";
 import React from "react";
-
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import ApiClient from "../../components/ApiClient";
 function MissionList() {
+  const [lists, setLists] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [category, setCategory] = useState('전체');
 
-    return (
-        <div className="mission-list-index">
+  const fetchMission = () => {
+    ApiClient.get(`/missions?page=${page}`)
+      .then((response) => {
+        console.log(response);
+        setLists(response.data.content);
+        setTotalPages(response.data.totalPages);
+      })
+  }
+
+  function createPageNumberArray(startPage, endPage) {
+    let pages = []
+    for (let i = startPage; i <= endPage; i ++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  const handleCategory = (category) => {
+    setCategory(category);
+  }
+
+  const filteredMissions = lists.filter(list => {
+    if (category === '전체') {
+      return true;
+    } else {
+      return list.category === category;
+    }
+  });
+
+
+
+  useEffect(() => {
+    const pageFromUrl = searchParams.get('page');
+    if (pageFromUrl !== null) {
+      setPage(parseInt(pageFromUrl))
+    }
+
+  }, [])
+
+  useEffect(() => {
+    searchParams.set('page', page.toString());
+    setSearchParams(searchParams);
+    fetchMission();
+  }, [page])
+
+  // useEffect(() => {
+  //   const currentPage = parseInt(searchParams.get('page'));
+  //   if (currentPage !== page) {
+  //     searchParams.set('page', page.toString());
+  //     setSearchParams(searchParams);
+  //   }
+  //   fetchMission();
+  // }, [page])
+
+  useEffect(() => {
+    console.log(lists);
+  }, [lists])
+
+  return (
+    <div className="mission-list-index">
       <div className="mission-list-wrap-wrapper">
         <div className="mission-list-wrap">
           <div className="header-login">
@@ -42,7 +107,7 @@ function MissionList() {
           <div className="mission-middle-menu">
             <div className="menu-select">
               <div className="menu-total">
-                <div className="div">전체&nbsp;&nbsp;&nbsp;&nbsp; |</div>
+                <div className="div" onClick={() => handleCategory("전체")}>전체&nbsp;&nbsp;&nbsp;&nbsp; |</div>
               </div>
               <div className="menu-activity">
                 <div className="div-2">
@@ -53,7 +118,7 @@ function MissionList() {
                   />
                 </div>
                 <div className="div-2">
-                  <div className="div">활동형&nbsp;&nbsp;&nbsp;&nbsp; |</div>
+                  <div className="div" onClick={() => handleCategory("활동형")}>활동형&nbsp;&nbsp;&nbsp;&nbsp; |</div>
                 </div>
               </div>
               <div className="div-3">
@@ -65,7 +130,7 @@ function MissionList() {
                   />
                 </div>
                 <div className="div-4">
-                  <div className="div">참여형&nbsp;&nbsp;&nbsp;&nbsp; |</div>
+                  <div className="div" onClick={() => handleCategory("참여형")}>참여형&nbsp;&nbsp;&nbsp;&nbsp; |</div>
                 </div>
               </div>
               <div className="div-3">
@@ -77,7 +142,7 @@ function MissionList() {
                   />
                 </div>
                 <div className="div-5">
-                  <div className="div">도전형</div>
+                  <div className="div" onClick={() => handleCategory("도전형")}>도전형</div>
                 </div>
               </div>
             </div>
@@ -203,362 +268,124 @@ function MissionList() {
               </div>
             </div>
             <div className="mission-list-wrap-2">
-              <div className="mission-list">
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-1.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
+              {filteredMissions.map((item, index) => {
+              {/* {lists.map((item, index) => { */}
+                return (
+                  <div className="mission-list">
+                    <div className="mission-frame-wrapper">
+                      <div className="mission-frame">
+                        <div className="mission-image-wrapper">
+                          <Link to={`/missions/${item.missionId}`}>
+                          <img
+                            className="mission-image-2"
+                            alt="Mission image"
+                            src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-1.svg"
+                          />
+                          </Link>
                         </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
+                        <div className="mission-info">
+                          <div className="mission-info-wrap">
+                            <div className="div-2">
+                              <Link to={`/missions/${item.missionId}`}><div className="mission-name-text">{item ? item.title : "Loading..."} </div></Link>
+                            </div>
+                            <div className="mission-point">
+                              <Link to={`/missions/${item.missionId}`}><div className="mission-point-text">{item ? item.point : "Loading..."} P</div></Link>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-2.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
+                        <div className="challenge-button">
+                          <div className="text-wrapper-4">도전하기</div>
                         </div>
                       </div>
                     </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
                   </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-3.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-4.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mission-list">
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-5.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-6.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-7.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-8.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="mission-list">
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-9.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-10.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-11.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="mission-frame-wrapper">
-                  <div className="mission-frame">
-                    <div className="mission-image-wrapper">
-                      <img
-                        className="mission-image-2"
-                        alt="Mission image"
-                        src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/6570992a80abe6b84bdfe96b/img/mission-image-12.svg"
-                      />
-                    </div>
-                    <div className="mission-info">
-                      <div className="mission-info-wrap">
-                        <div className="div-2">
-                          <div className="mission-name-text">쓰레기 줍기</div>
-                        </div>
-                        <div className="mission-point">
-                          <div className="mission-point-text">10 P</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="challenge-button">
-                      <div className="text-wrapper-4">도전하기</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                )
+              })}
             </div>
             <div className="pagination-button">
-              <div className="pagination-left-wrap">
-                <div className="pagination-left">
-                  <img
-                    className="img-3"
-                    alt="Double left"
-                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/65715de20811290773747d5e/img/double-left@2x.png"
-                  />
-                </div>
-              </div>
-              <div className="pagination">
-                <div className="text-wrapper-5">1</div>
-              </div>
-              <div className="pagination-num">
-                <div className="element">2</div>
-              </div>
-              <div className="pagination">
-                <div className="text-wrapper-5">3</div>
-              </div>
-              <div className="pagination">
-                <div className="text-wrapper-5">4</div>
-              </div>
-              <div className="pagination">
-                <div className="text-wrapper-5">5</div>
-              </div>
-              <div className="pagination-right">
-                <div className="double-right-wrapper">
-                  <img
-                    className="img-3"
-                    alt="Double right"
-                    src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/65715de20811290773747d5e/img/double-right@2x.png"
-                  />
-                </div>
+            <div className="pagination-left-wrap">
+              <button className="pagination-left" onClick={() => {
+                console.log("Left button clicked")
+                setPage(oldPage => Math.max(oldPage -1, 0))}} disabled={page === 0}>
+                &lt;&lt;
+              </button>
+            </div>
+            <div className="pagination">
+            {createPageNumberArray(0, totalPages - 1).map(pageNumber => (
+                        <button className={`text-wrapper-5 ${pageNumber === page ? "active" : ""}`}
+                            key={pageNumber}
+                            onClick={() => {
+                              console.log('page clicked')
+                              setPage(pageNumber)}}
+                            disabled={pageNumber === page}>
+                            {pageNumber + 1}                    
+                        </button>
+                    ))}
+            </div>
+
+            <div className="pagination-right">
+              <button className="double-right-wrapper" onClick={() => {
+                console.log("Right button clicked")
+                setPage(oldPage => Math.min(oldPage + 1, totalPages - 1))}} disabled={page === totalPages - 1}>
+                &gt;&gt;
+              </button>
+            </div>
+          </div>
+          </div>
+          {/* <div className="pagination-button">
+            <div className="pagination-left-wrap">
+              <button className="pagination-left" onClick={() => {
+                console.log("Left button clicked")
+                setPage(oldPage => Math.max(oldPage -1, 0))}} disabled={page === 0}>
+                &lt;&lt;
+              </button>
+            </div>
+            <div className="pagination">
+            {createPageNumberArray(0, totalPages - 1).map(pageNumber => (
+                        <button className={`text-wrapper-5 ${pageNumber === page ? "active" : ""}`}
+                            key={pageNumber}
+                            onClick={() => {
+                              console.log('page clicked')
+                              setPage(pageNumber)}}
+                            disabled={pageNumber === page}>
+                            {pageNumber + 1}                    
+                        </button>
+                    ))}
+            </div>
+
+            <div className="pagination-right">
+              <button className="double-right-wrapper" onClick={() => {
+                console.log("Right button clicked")
+                setPage(oldPage => Math.min(oldPage + 1, totalPages - 1))}} disabled={page === totalPages - 1}>
+                &gt;&gt;
+              </button>
+            </div>
+          </div> */}
+        </div>
+        <footer className="footer">
+          <div className="footer-wrap">
+            <div className="logo-wrap">
+              <img
+                className="img"
+                alt="Eco connect logo"
+                src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656f39b816e4b95e9e1c32c1/img/eco-connect-logo.png"
+              />
+            </div>
+            <div className="menu-wrap">
+              <div className="text-wrapper-6">미용안내</div>
+              <div className="text-wrapper-6">공지사항</div>
+              <div className="q-a">Q&amp;A</div>
+              <div className="text-wrapper-6">이용약관</div>
+              <p className="p">개인정보 수집 및 이용 동의</p>
+            </div>
+            <div className="inquiry-button-wrap">
+              <div className="inquiry">문의하기</div>
+              <div className="direct-button">
+                <div className="direct">바로가기</div>
               </div>
             </div>
           </div>
-          <footer className="footer">
-            <div className="footer-wrap">
-              <div className="logo-wrap">
-                <img
-                  className="img"
-                  alt="Eco connect logo"
-                  src="https://cdn.animaapp.com/projects/6560b21274de9042f7d947f4/releases/656f39b816e4b95e9e1c32c1/img/eco-connect-logo.png"
-                />
-              </div>
-              <div className="menu-wrap">
-                <div className="text-wrapper-6">미용안내</div>
-                <div className="text-wrapper-6">공지사항</div>
-                <div className="q-a">Q&amp;A</div>
-                <div className="text-wrapper-6">이용약관</div>
-                <p className="p">개인정보 수집 및 이용 동의</p>
-              </div>
-              <div className="inquiry-button-wrap">
-                <div className="inquiry">문의하기</div>
-                <div className="direct-button">
-                  <div className="direct">바로가기</div>
-                </div>
-              </div>
-            </div>
-          </footer>
-        </div>
+        </footer>
       </div>
     </div>
     )

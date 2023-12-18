@@ -7,6 +7,7 @@ import com.example.practice.repository.GatheringRepository;
 import com.example.practice.repository.MemberGatheringRepository;
 import com.example.practice.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,6 +20,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class GatheringService {
 
 
@@ -43,6 +45,8 @@ public class GatheringService {
         return gatheringRepository.findById(gatheringId).orElseThrow(() -> new IllegalArgumentException("no such data"));
 
     }
+
+
     @Transactional(readOnly = true)
     public Page<Gathering> findGatheringByStatus(String status, Pageable pageable) {
         Status statusEnum = Status.valueOf(status);
@@ -52,6 +56,13 @@ public class GatheringService {
     @Transactional(readOnly = true)
     public Page<Gathering> findGatheringByTitle(String title, Pageable pageable) {
         return gatheringRepository.findByTitleLike("%" + title + "%", pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Gathering> findGatheringByStatusAndTitle(String status, String title, Pageable pageable) {
+        log.info("findGatheringByStatusAndTitle called");
+        Status statusEnum = Status.valueOf(status);
+        return gatheringRepository.findByStatusEqualsAndTitleLike(statusEnum, "%" + title + "%", pageable);
     }
 
     public void addGathering(GatheringCreateDto gatheringCreateDto) {
