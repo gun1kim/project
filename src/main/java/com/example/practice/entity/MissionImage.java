@@ -15,4 +15,10 @@ public class MissionImage {
 
     private String imageUrl;
 
+    public MissionImage() {}
+
+    public MissionImage(String imageUrl, MemberMission memberMission) {
+        this.imageUrl = imageUrl;
+        this.memberMission = memberMission;
+    }
 }

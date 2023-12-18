@@ -36,4 +36,10 @@ public class MemberMission {
 
     private LocalDateTime finishedAt;
 
+    public MemberMission() {}
+    public MemberMission(Member member, Mission mission) {
+        this.member = member;
+        this.mission = mission;
+    }
+
 }
