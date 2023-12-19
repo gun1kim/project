@@ -1,8 +1,10 @@
 package com.example.practice.dto.member;
 
+import com.example.practice.dto.MemberMissionDto;
 import com.example.practice.entity.Member;
 import lombok.*;
 
+import java.util.List;
 
 
 @Getter
@@ -15,6 +17,7 @@ public class MemberDto {
     private String name;
     private String email;
     private String profile;
+    private List<MemberMissionDto> memberMissions;
 
     public Member toEntity() {
         return Member.builder()

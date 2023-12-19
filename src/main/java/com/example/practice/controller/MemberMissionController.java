@@ -2,6 +2,7 @@ package com.example.practice.controller;
 
 
 import com.example.practice.dto.MemberMissionPostDto;
+import com.example.practice.dto.MemberMissionRequestDto;
 import com.example.practice.jwt.CustomMemberDetails;
 import com.example.practice.service.MemberMissionService;
 import com.example.practice.service.MemberService;
@@ -20,21 +21,31 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberMissionController {
 
-    private final MemberService memberService;
-    private final MissionService missionService;
     private final MemberMissionService memberMissionService;
 
-    @PostMapping("/members/{memberId}/missions/{missionId}")
+    @PostMapping("/missions/{missionId}/join")
     public ResponseEntity<?> joinMission(@PathVariable Long missionId, @AuthenticationPrincipal CustomMemberDetails memberDetails) {
         memberMissionService.joinMission(memberDetails.getMemberId(),missionId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @PostMapping("/members/missions/posts")
-    public ResponseEntity<?> writeMissionPost(@RequestBody MemberMissionPostDto memberMissionPostDto) {
+
+
+    @PostMapping("/missions/{missionId}/post")
+    public ResponseEntity<?> writeMissionPost(@ModelAttribute MemberMissionPostDto memberMissionPostDto) {
         memberMissionService.addMemberMissionPost(memberMissionPostDto);
 
         return ResponseEntity.ok(HttpStatus.CREATED);
+    }
+
+
+    // 관리자 컨트롤러로 나중에 뺴야할듯 ?
+    @PutMapping("/missions/{missionId}/approval")
+    public ResponseEntity<?> approveMissionPost(@RequestBody MemberMissionRequestDto memberMissionRequestDto) {
+        log.info("memberMissionId = {}", memberMissionRequestDto);
+        memberMissionService.approveMissionPost(memberMissionRequestDto.getMemberMissionId());
+
+        return ResponseEntity.ok().build();
     }
 
 

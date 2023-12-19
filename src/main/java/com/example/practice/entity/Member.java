@@ -42,11 +42,17 @@ public class Member  {
 
     private String profile;
 
+//    private String phone;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(nullable = false)
     private LocalDateTime createAt = LocalDateTime.now();
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "point_id")
+    private Point point;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<MemberGathering> memberGatherings = new ArrayList<>();
@@ -54,16 +60,25 @@ public class Member  {
     @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Gathering> createGatherings = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<MemberMission> memberMissions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<MissionLike> likeMissions = new ArrayList<>();
 
     // 양빙향 연관관계 설정 메서드
     public void addMemberMission(MemberMission memberMission) {
         this.memberMissions.add(memberMission);
         memberMission.setMember(this);
+    }
+
+
+    public void increasePoint(int point) {
+        if (this.point == null) {
+            this.point = new Point(point, point);
+        } else {
+            this.point.increasePoint(point);
+        }
     }
 
 }

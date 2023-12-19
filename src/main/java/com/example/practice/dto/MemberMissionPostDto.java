@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class MemberMissionPostDto {
-
+    private Long memberMissionId;
     private Long memberId;
     private Long missionId;
     private String content;

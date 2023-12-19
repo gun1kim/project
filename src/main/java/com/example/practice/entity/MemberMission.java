@@ -1,15 +1,17 @@
 package com.example.practice.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
 public class MemberMission {
 
     @Id
@@ -26,13 +28,12 @@ public class MemberMission {
     private Mission mission;
 
     @OneToMany(mappedBy = "memberMission", cascade = CascadeType.ALL)
-    private List<MissionImage> images;
+    private List<MissionImage> images = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private MissionStatus status; // 미션 진행 상태
 
     private String content;
-    private int point;
 
     private LocalDateTime finishedAt;
 
@@ -41,5 +42,16 @@ public class MemberMission {
         this.member = member;
         this.mission = mission;
     }
+
+    public void approve() {
+        this.status = MissionStatus.COMPLETED;
+        this.finishedAt = LocalDateTime.now();
+    }
+
+    public void reject() {
+        this.status = MissionStatus.REJECTED;
+        this.finishedAt = LocalDateTime.now();
+    }
+
 
 }

@@ -11,6 +11,7 @@ import Join from './pages/member/Join';
 import Login from './pages/member/Login';
 import { RecoilRoot } from 'recoil';
 import { AccessTokenProvider } from './context/AccessTokenContext';
+import MyMission from './pages/member/MyMission';
 // import MemberContext from './context/MemberContext';
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
               <Route path="/missions/:missionId" element={<MissionDetail />}></Route>
               <Route path="/members/join" element={<Join />}></Route>
               <Route path="/members/login" element={<AccessTokenProvider><Login /></AccessTokenProvider>}></Route>
+              <Route path="/mypage/missions" element={<MyMission />}></Route>
           </Routes>
       </BrowserRouter>
        </RecoilRoot>

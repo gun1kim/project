@@ -1,5 +1,6 @@
 package com.example.practice.controller;
 
+import com.example.practice.dto.member.MemberDto;
 import com.example.practice.entity.Gathering;
 import com.example.practice.entity.Member;
 import com.example.practice.entity.MemberGathering;
@@ -28,9 +29,10 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public Member getMemberById(@PathVariable Long memberId) {
+    public MemberDto getMemberById(@PathVariable Long memberId) {
         Member member = memberService.getMemberById(memberId);
-        return member;
+        MemberDto memberDto = MemberDto.fromEntity(member);
+        return memberDto;
     }
     @PostMapping("/new")
     public void addMember(@RequestBody Member member) {
@@ -56,7 +58,7 @@ public class MemberController {
         return gatherings;
     }
 
-    @PostMapping("//find-id")
+    @PostMapping("/find-id")
     public Boolean memberDuplicateIdFind(@RequestBody Map<String, String> idMap) {
         return memberService.findIdDuplicateMember(idMap.get("id"));
     }

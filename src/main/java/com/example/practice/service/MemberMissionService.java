@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,30 +35,49 @@ public class MemberMissionService {
 
         member.addMemberMission(memberMission);
         mission.addMemberMission(memberMission);
-
+        memberMission.setStatus(MissionStatus.ONGOING);
         memberMissionRepository.save(memberMission);
 
     }
 
-    public void addMemberMissionPost(MemberMissionPostDto memberMissionPostDto) {
-        Member member = memberRepository.findById(memberMissionPostDto.getMemberId()).orElseThrow(() -> new IllegalArgumentException("no such member"));
-        Mission mission = missionRepository.findById(memberMissionPostDto.getMissionId()).orElseThrow(() -> new IllegalArgumentException("no such mission"));
 
-        MemberMission memberMission = new MemberMission(member, mission);
+
+    public void addMemberMissionPost(MemberMissionPostDto memberMissionPostDto) {
+        MemberMission memberMission = memberMissionRepository.findById(memberMissionPostDto.getMemberMissionId()).orElseThrow(() -> new IllegalArgumentException("no such member mission"));
+
+        String filePath = "images/mission_post";
+
         memberMission.setContent(memberMissionPostDto.getContent());
-        memberMission.setStatus(MissionStatus.ONGOING);
+        memberMission.setStatus(MissionStatus.SUBMITTED);
 
         List<String> imageUrls = new ArrayList<>();
         for (MultipartFile image : memberMissionPostDto.getImages()) {
-            String imageUrl = s3FileUploader.uploadFileToS3(image, "path");
+            String imageUrl = s3FileUploader.uploadFileToS3(image, filePath);
             MissionImage missionImage = new MissionImage(imageUrl, memberMission);
             memberMission.getImages().add(missionImage);
-
         }
 
         memberMissionRepository.save(memberMission);
 
     }
 
+    public void approveMissionPost(Long memberMissionId) {
+
+        MemberMission memberMission = memberMissionRepository.findById(memberMissionId).orElseThrow(() -> new IllegalArgumentException("no such memberMission"));
+        Member member = memberRepository.findById(memberMission.getMember().getMemberId()).orElseThrow(() -> new IllegalArgumentException("no such member"));
+        Mission mission = missionRepository.findById(memberMission.getMission().getMissionId()).orElseThrow(() -> new IllegalArgumentException("no such mission"));
+
+        memberMission.approve();
+        member.increasePoint(mission.getPoint());
+
+    }
+
+    public void rejectMissionPost(Long memberMissionId) {
+        MemberMission memberMission = memberMissionRepository.findById(memberMissionId).orElseThrow(() -> new IllegalArgumentException("no such memberMission"));
+        memberMission.reject();
+        log.info("미션 승인 요청이 거절되었습니다.");
+
+
+    }
 
 }
