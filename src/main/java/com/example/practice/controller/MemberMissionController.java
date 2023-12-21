@@ -5,11 +5,8 @@ import com.example.practice.dto.MemberMissionPostDto;
 import com.example.practice.dto.MemberMissionRequestDto;
 import com.example.practice.jwt.CustomMemberDetails;
 import com.example.practice.service.MemberMissionService;
-import com.example.practice.service.MemberService;
-import com.example.practice.service.MissionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,5 +45,11 @@ public class MemberMissionController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/missions/{missionId}/reject")
+    public ResponseEntity<?> rejectMissionPost(@RequestBody MemberMissionRequestDto memberMissionRequestDto) {
+        memberMissionService.rejectMissionPost(memberMissionRequestDto.getMemberMissionId());
+
+        return ResponseEntity.ok().build();
+    }
 
 }

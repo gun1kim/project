@@ -1,7 +1,7 @@
 package com.example.practice.service;
 
-import com.example.practice.dto.TokenDto;
-import com.example.practice.dto.TokenRequestDto;
+import com.example.practice.dto.token.TokenDto;
+import com.example.practice.dto.token.TokenRequestDto;
 import com.example.practice.dto.member.MemberCreateDto;
 import com.example.practice.dto.member.MemberDto;
 import com.example.practice.dto.member.MemberLoginDto;
@@ -9,8 +9,8 @@ import com.example.practice.entity.Member;
 import com.example.practice.entity.RefreshToken;
 import com.example.practice.entity.Role;
 import com.example.practice.jwt.TokenProvider;
-import com.example.practice.repository.MemberRepository;
-import com.example.practice.repository.RefreshTokenRepository;
+import com.example.practice.repository.member.MemberRepository;
+import com.example.practice.repository.token.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

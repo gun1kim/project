@@ -1,4 +1,4 @@
-package com.example.practice.repository;
+package com.example.practice.repository.mission;
 
 import com.example.practice.entity.Mission;
 import com.example.practice.entity.Status;

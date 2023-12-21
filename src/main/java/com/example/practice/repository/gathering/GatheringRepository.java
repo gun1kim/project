@@ -1,4 +1,4 @@
-package com.example.practice.repository;
+package com.example.practice.repository.gathering;
 
 import com.example.practice.entity.Gathering;
 import com.example.practice.entity.Status;

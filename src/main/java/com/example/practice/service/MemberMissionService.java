@@ -3,16 +3,14 @@ package com.example.practice.service;
 import com.example.practice.dto.MemberMissionPostDto;
 import com.example.practice.entity.*;
 import com.example.practice.repository.MemberMissionRepository;
-import com.example.practice.repository.MemberRepository;
-import com.example.practice.repository.MissionRepository;
-import jakarta.mail.Multipart;
+import com.example.practice.repository.member.MemberRepository;
+import com.example.practice.repository.mission.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +44,7 @@ public class MemberMissionService {
         MemberMission memberMission = memberMissionRepository.findById(memberMissionPostDto.getMemberMissionId()).orElseThrow(() -> new IllegalArgumentException("no such member mission"));
 
         String filePath = "images/mission_post";
-
+        memberMission.setTitle(memberMissionPostDto.getTitle());
         memberMission.setContent(memberMissionPostDto.getContent());
         memberMission.setStatus(MissionStatus.SUBMITTED);
 
@@ -74,10 +72,13 @@ public class MemberMissionService {
 
     public void rejectMissionPost(Long memberMissionId) {
         MemberMission memberMission = memberMissionRepository.findById(memberMissionId).orElseThrow(() -> new IllegalArgumentException("no such memberMission"));
+
+
         memberMission.reject();
         log.info("미션 승인 요청이 거절되었습니다.");
 
 
     }
+
 
 }

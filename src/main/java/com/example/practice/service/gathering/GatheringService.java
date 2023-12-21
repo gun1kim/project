@@ -1,11 +1,12 @@
-package com.example.practice.service;
+package com.example.practice.service.gathering;
 
 import com.example.practice.entity.*;
 import com.example.practice.dto.gathering.GatheringCreateDto;
 import com.example.practice.dto.gathering.GatheringUpdateDto;
-import com.example.practice.repository.GatheringRepository;
+import com.example.practice.repository.gathering.GatheringRepository;
 import com.example.practice.repository.MemberGatheringRepository;
-import com.example.practice.repository.MemberRepository;
+import com.example.practice.repository.member.MemberRepository;
+import com.example.practice.service.S3FileUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -75,14 +76,6 @@ public class GatheringService {
         Gathering gathering = gatheringCreateDto.toEntity(creator);
         gathering.setLocation(address);
         gathering.setImage(imageUrl);
-//        Gathering gathering = new Gathering();
-
-//        gathering.setTitle(gatheringCreateDto.getTitle());
-//        gathering.setIntro(gatheringCreateDto.getIntro());
-//        gathering.setEtc(gatheringCreateDto.getEtc());
-//        gathering.setLocation(address);
-//        gathering.setImage(imageUrl);
-//        gathering.setCapacity(gatheringCreateDto.getCapacity());
 
         if (gatheringCreateDto.getDeadline().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("모집 마감일은 오늘 날짜보다 작은 값으로는 설정 할 수 없습니다.");
@@ -158,6 +151,8 @@ public class GatheringService {
         }
         gatheringRepository.deleteById(gatheringId);
     }
+
+
 
     @Scheduled(cron = "0 0 0 * * *")
     public void modifyGatheringStatus() {

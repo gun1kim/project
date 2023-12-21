@@ -1,16 +1,19 @@
-package com.example.practice.dto;
+package com.example.practice.dto.token;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenRequestDto {
+public class TokenDto {
 
+
+    private String grantType;
     private String accessToken;
+    private Long accessTokenExpiresIn;
     private String refreshToken;
 }

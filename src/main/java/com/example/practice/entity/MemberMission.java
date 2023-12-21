@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
 public class MemberMission {
 
     @Id
@@ -32,17 +33,12 @@ public class MemberMission {
 
     @Enumerated(EnumType.STRING)
     private MissionStatus status; // 미션 진행 상태
-
+    private String title;
     private String content;
 
     private LocalDateTime finishedAt;
 
     public MemberMission() {}
-    public MemberMission(Member member, Mission mission) {
-        this.member = member;
-        this.mission = mission;
-    }
-
     public void approve() {
         this.status = MissionStatus.COMPLETED;
         this.finishedAt = LocalDateTime.now();

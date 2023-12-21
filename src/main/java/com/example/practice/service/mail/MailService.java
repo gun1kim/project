@@ -1,6 +1,6 @@
-package com.example.practice.service;
+package com.example.practice.service.mail;
 
-import com.example.practice.dto.MailResponseDto;
+import com.example.practice.dto.mail.MailResponseDto;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

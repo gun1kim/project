@@ -11,7 +11,7 @@ function GatheringDetail() {
     let gatheringId = params.gatheringId;
     const [gathering, setGathering] = useState();
     const navigate = useNavigate();
-    // const [participants, setParticipants] = useState([]);
+    const [participants, setParticipants] = useState([]);
     const [memberId, setMemberId] = useState();
     const [memberName, setMemberName] = useState("");
 
@@ -29,15 +29,25 @@ function GatheringDetail() {
     };
 
     const fetchMember = () => {
-        ApiClient.get(`http://localhost:8080/api/member/me`)
+        ApiClient.get(`http://localhost:8080/api/members/me`)
         .then((response) => {
-            console.log(response);
             setMemberId(response.data.memberId);
             setMemberName(response.data.username);
             // setMemberId(response.data.username);
         })
         .catch((error) => {
             console.log('Error fetching member data from API:' + error);
+        })
+    }
+
+    const fetchGatheringMembers = () => {
+        ApiClient.get(`/gathering/${gatheringId}/members`)
+        .then((response) => {
+            console.log(response);
+            setParticipants(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
         })
     }
 
@@ -52,12 +62,17 @@ function GatheringDetail() {
     // }
 
     useEffect(() => {
+        console.log(participants)
+    },[participants])
+
+    useEffect(() => {
         fetchMember();
         // fetchGatheringMembers();
     }, [])
 
     useEffect(() => { 
         fetchData();
+        // fetchGatheringMembers();
     }, [gatheringId])
 
     useEffect(() => {
@@ -189,8 +204,15 @@ function GatheringDetail() {
                                             return <li key={participant.memberId}>{participant.id}</li>
                                         })}
                                         <p>님이 함께 하고 있어요.</p> */}
+                                        {participants ? participants.map(participant => {
+                                            return (<>
+                                            <p key={participant.memberId}>{participant.id}</p>
+                                             <p>님이 참가중이에요.</p>
+                                             </>)
+                                        }) : null }
                                 <div className="detail-main-check-wrapper">
-                                    <div className="detail-main-check-3">확인하기</div>
+                                    {/* <div className="detail-main-check-3">확인하기</div> */}
+                                    <button className="detail-main-check-3" onClick={fetchGatheringMembers}>확인하기</button>
                                     
                                 </div>
                             </div>
@@ -241,7 +263,7 @@ function GatheringDetail() {
                     />
                 </div>
                 <div className="gathering-title">
-                    <div className="title">오리역 봉사모임!</div>
+                    <div className="title">{gathering ? gathering.title : "Loading..."}</div>
                 </div>
                 <div className="gathering-banner">
                     <img

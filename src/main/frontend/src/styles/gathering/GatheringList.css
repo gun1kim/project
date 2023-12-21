@@ -849,7 +849,12 @@ button.active {
     width: fit-content;
 }
 
-a {
+.register-button {
+    text-decoration: none;
+    color: black;
+}
+
+.gathering-list-info a {
     text-decoration: none;
     color: black;
 }

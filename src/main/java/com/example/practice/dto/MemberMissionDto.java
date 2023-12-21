@@ -15,6 +15,7 @@ public class MemberMissionDto {
     private Long memberId;
     private Long missionId;
     private String status;
+    private String title;
     private String content;
 
     public MemberMission toEntity() {
@@ -22,6 +23,7 @@ public class MemberMissionDto {
         // memberId와 missionId를 이용해서 member와 mission을 설정하는 로직 필요
         memberMission.setMemberMissionId(memberMissionId);
         memberMission.setStatus(MissionStatus.valueOf(status));
+        memberMission.setTitle(title);
         memberMission.setContent(content);
         // images를 MissionImage 리스트로 변환하는 로직이 필요
         return memberMission;
@@ -33,6 +35,7 @@ public class MemberMissionDto {
                 .memberId(memberMission.getMember().getMemberId())
                 .missionId(memberMission.getMission().getMissionId())
                 .status(memberMission.getStatus().name())
+                .title(memberMission.getTitle())
                 .content(memberMission.getContent())
                 .build();
     }

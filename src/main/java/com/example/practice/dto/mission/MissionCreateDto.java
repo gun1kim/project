@@ -5,6 +5,7 @@ import com.example.practice.entity.Mission;
 import com.example.practice.entity.Status;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -16,14 +17,18 @@ public class MissionCreateDto {
     private String title;
     private String description;
 
+    private MultipartFile image;
 
     private String zoneCode;
     private String fullAddress;
     private String subAddress;
 
     private int point;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime startAt;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime endAt;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime deadline;
 
     private String host;
@@ -36,6 +41,7 @@ public class MissionCreateDto {
         return Mission.builder()
                 .title(title)
                 .description(description)
+                .image(image.getOriginalFilename())
                 .address(address)
                 .point(point)
                 .startAt(startAt)

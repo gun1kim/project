@@ -1,12 +1,13 @@
-package com.example.practice.service;
+package com.example.practice.service.mission;
 
 import com.example.practice.entity.Mission;
 import com.example.practice.entity.Status;
 import com.example.practice.dto.mission.MissionCreateDto;
 import com.example.practice.dto.mission.MissionDto;
 import com.example.practice.dto.mission.MissionUpdateDto;
-import com.example.practice.repository.MissionRepository;
-import com.example.practice.repository.MemberRepository;
+import com.example.practice.repository.mission.MissionRepository;
+import com.example.practice.repository.member.MemberRepository;
+import com.example.practice.service.S3FileUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,17 +32,23 @@ public class MissionService {
 
 
     public void addMission(MissionCreateDto missionCreateDto) {
+        String filePath = "images/missions";
+        String imageUrl = s3FileUploader.uploadFileToS3(missionCreateDto.getImage(), filePath);
+
 
         if (missionCreateDto.getStartAt().isAfter(missionCreateDto.getEndAt())) {
             throw new IllegalArgumentException("미션 종료 시간은 시작 시간보다 이후여야 합니다.");
         }
         Mission mission = missionCreateDto.toEntity();
+        mission.setImage(imageUrl);
         missionRepository.save(mission);
     }
 
     public void modifyMission(Long id, MissionUpdateDto missionUpdateDto) {
+        String filePath = "images/missions";
+        String imageUrl = s3FileUploader.uploadFileToS3(missionUpdateDto.getImage(), filePath);
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("no such mission"));
-
+        mission.setImage(imageUrl);
         if (missionUpdateDto.getPoint() < 0) {
             throw new IllegalArgumentException("point cannot be minus");
         }

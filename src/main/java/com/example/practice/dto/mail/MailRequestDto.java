@@ -1,4 +1,4 @@
-package com.example.practice.dto;
+package com.example.practice.dto.mail;
 
 import lombok.Data;
 

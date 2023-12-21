@@ -34,7 +34,7 @@ public class GatheringDto {
     private int count;
     private int capacity;
 
-    private List<MemberDto> participants;
+//    private List<MemberDto> participants;
 
     public Gathering toEntity(Member creator) {
         Address address = new Address(zoneCode, fullAddress, subAddress);
@@ -57,9 +57,9 @@ public class GatheringDto {
 
     public static GatheringDto fromEntity(Gathering gathering) {
         Address address = gathering.getLocation();
-        List<MemberDto> participants = gathering.getMemberGatherings().stream()
-                .map(userGathering -> MemberDto.fromEntity(userGathering.getMember()))
-                .collect(Collectors.toList());
+//        List<MemberDto> participants = gathering.getMemberGatherings().stream()
+//                .map(userGathering -> MemberDto.fromEntity(userGathering.getMember()))
+//                .collect(Collectors.toList());
 
         return GatheringDto.builder()
                 .gatheringId(gathering.getGatheringId())
@@ -77,7 +77,7 @@ public class GatheringDto {
                 .startAt(gathering.getStartAt())
                 .count(gathering.getCount())
                 .capacity(gathering.getCapacity())
-                .participants(participants)
+//                .participants(participants)
                 .build();
     }
 

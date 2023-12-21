@@ -17,7 +17,6 @@ public class MemberDto {
     private String name;
     private String email;
     private String profile;
-    private List<MemberMissionDto> memberMissions;
 
     public Member toEntity() {
         return Member.builder()

@@ -1,8 +1,8 @@
-package com.example.practice.controller;
+package com.example.practice.controller.mail;
 
-import com.example.practice.dto.MailRequestDto;
-import com.example.practice.dto.MailResponseDto;
-import com.example.practice.service.MailService;
+import com.example.practice.dto.mail.MailRequestDto;
+import com.example.practice.dto.mail.MailResponseDto;
+import com.example.practice.service.mail.MailService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

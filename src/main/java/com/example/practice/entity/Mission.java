@@ -23,6 +23,7 @@ public class Mission {
     private String title;
 
     private String description; // 미션설명
+    private String image;
     private int point; // 미션 완료시 획득 포인트
 
     private LocalDateTime createAt = LocalDateTime.now();

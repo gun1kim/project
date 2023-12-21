@@ -1,4 +1,4 @@
-package com.example.practice.repository;
+package com.example.practice.repository.member;
 
 import com.example.practice.entity.Member;
 import org.springframework.data.jpa.repository.EntityGraph;

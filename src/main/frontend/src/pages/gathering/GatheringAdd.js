@@ -52,7 +52,7 @@ function GatheringAdd() {
     }
 
     const fetchMember = () => {
-        ApiClient.get('/member/me')
+        ApiClient.get('/members/me')
         .then((response) => {
             setMemberId(response.data.memberId);
             console.log(response);

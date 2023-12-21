@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class MissionUpdateDto {
     private String title;
     private String description;
+    private MultipartFile image;
     private int point;
     private String zoneCode;
     private String fullAddress;
@@ -22,7 +23,7 @@ public class MissionUpdateDto {
     private LocalDateTime deadline;
 
     private String host;
-    private MultipartFile image;
+//    private MultipartFile image;
     private String category;
 
 

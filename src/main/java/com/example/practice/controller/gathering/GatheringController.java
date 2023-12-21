@@ -1,12 +1,11 @@
-package com.example.practice.controller;
+package com.example.practice.controller.gathering;
 
 import com.example.practice.entity.*;
 import com.example.practice.dto.gathering.GatheringCreateDto;
 import com.example.practice.dto.gathering.GatheringDto;
 import com.example.practice.dto.gathering.GatheringUpdateDto;
 import com.example.practice.dto.member.MemberDto;
-import com.example.practice.jwt.CustomMemberDetails;
-import com.example.practice.service.GatheringService;
+import com.example.practice.service.gathering.GatheringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -114,7 +112,7 @@ public class GatheringController {
     }
 
     @GetMapping("/gathering/{gatheringId}/members")
-    public List<MemberDto> gatheringUserList(@PathVariable Long gatheringId) {
+    public List<MemberDto> gatheringMembers(@PathVariable Long gatheringId) {
         Gathering gathering = gatheringService.findGatheringById(gatheringId);
         List<MemberGathering> memberGatherings = gathering.getMemberGatherings();
 
@@ -130,8 +128,16 @@ public class GatheringController {
 
         gatheringService.removeById(gatheringId);
 
-
     }
+
+//    @GetMapping("/gathering/{gatheringId}/members")
+//    public List<MemberDto> getGatheringMembers(@PathVariable Long gatheringId) {
+//        List<Member> gatheringMembers = gatheringService.getGatheringMembers(gatheringId);
+//        List<MemberDto> memberDtos = gatheringMembers.stream()
+//                .map(MemberDto::fromEntity)
+//                .collect(Collectors.toList());
+//        return memberDtos;
+//    }
 
 
     public String getFullPath(String filename) {

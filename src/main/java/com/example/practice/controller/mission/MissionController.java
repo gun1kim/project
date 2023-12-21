@@ -1,11 +1,15 @@
-package com.example.practice.controller;
+package com.example.practice.controller.mission;
 
+import com.example.practice.dto.mission.MissionCreateDto;
 import com.example.practice.dto.mission.MissionDto;
-import com.example.practice.service.MissionService;
+import com.example.practice.dto.mission.MissionUpdateDto;
+import com.example.practice.entity.Mission;
+import com.example.practice.service.mission.MissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,10 +19,14 @@ public class MissionController {
 
     private final MissionService missionService;
 
-//    @GetMapping("/missions")
-//    public List<MissionDto> missionList() {
-//        return missionService.findAll();
-//    }
+    @PostMapping
+    public ResponseEntity<?> createMission(MissionCreateDto missionCreateDto) {
+        Mission mission = missionCreateDto.toEntity();
+        MissionDto missionDto = MissionDto.fromEntity(mission);
+        missionService.addMission(missionCreateDto);
+        return ResponseEntity.ok(missionDto);
+
+    }
 
     @GetMapping
     public Page<MissionDto> missionList(@PageableDefault(size = 8) Pageable pageable) {
@@ -46,15 +54,17 @@ public class MissionController {
     }
 
 
-
-//    @PostMapping("/missions/add")
-//    public ResponseEntity<Resource> missionAdd(@ModelAttribute MissionCreateDto missionCreateDto) {
-//        Mission mission = new Mission();
-//        saveFile(missionCreateDto.getImage());
-//    }
-
     @DeleteMapping("/{missionId}")
     public void missionRemove(@PathVariable Long missionId) {
         missionService.removeById(missionId);
     }
+
+    @PatchMapping("/{missionId}")
+    public void missionUpdate(@PathVariable Long missionId, MissionUpdateDto missionUpdateDto) {
+
+        missionService.modifyMission(missionId, missionUpdateDto);
+    }
+
+
+
 }

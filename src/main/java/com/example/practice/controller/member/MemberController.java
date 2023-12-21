@@ -1,10 +1,11 @@
-package com.example.practice.controller;
+package com.example.practice.controller.member;
 
+import com.example.practice.dto.MemberMissionDto;
+import com.example.practice.dto.point.PointDto;
+import com.example.practice.dto.gathering.GatheringDto;
 import com.example.practice.dto.member.MemberDto;
-import com.example.practice.entity.Gathering;
-import com.example.practice.entity.Member;
-import com.example.practice.entity.MemberGathering;
-import com.example.practice.service.MemberService;
+import com.example.practice.entity.*;
+import com.example.practice.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class MemberController {
 
     @GetMapping("")
     public List<Member> getAllMembers() {
-        List<Member> list = memberService.getAllMember();
+        List<Member> list = memberService.findAllMember();
         return list;
     }
 
@@ -46,16 +47,20 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/gatherings")
-    public List<Gathering> getMemberGatherings(@PathVariable Long memberId) {
+    public List<GatheringDto> getMemberGatherings(@PathVariable Long memberId) {
         Member member = memberService.getMemberById(memberId);
         List<MemberGathering> memberGatherings = member.getMemberGatherings();
 
-        List<Gathering> gatherings = memberGatherings.stream()
+//        List<Gathering> gatherings = memberGatherings.stream()
+//                .map(MemberGathering::getGathering)
+//                .collect(Collectors.toList());
+        List<GatheringDto> gatheringDtos = memberGatherings.stream()
                 .map(MemberGathering::getGathering)
+                .map(GatheringDto::fromEntity)
                 .collect(Collectors.toList());
 
-        log.info("gatherings = {}", gatherings);
-        return gatherings;
+        log.info("gatherings = {}", gatheringDtos);
+        return gatheringDtos;
     }
 
     @PostMapping("/find-id")
@@ -67,4 +72,21 @@ public class MemberController {
     public Boolean memberDuplicateEmailFind(@RequestBody Map<String, String> emailMap) {
         return memberService.findEmailDuplicateMember(emailMap.get("email"));
     }
+
+    @GetMapping("/{memberId}/missions")
+    public ResponseEntity<List<MemberMissionDto>> getMemberMissions(@PathVariable Long memberId) {
+        List<MemberMission> memberMissions = memberService.findMemberMissions(memberId);
+        List<MemberMissionDto> memberMissionDtos = memberMissions.stream()
+                .map(MemberMissionDto::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(memberMissionDtos);
+    }
+
+    @GetMapping("/{memberId}/point")
+    public ResponseEntity<PointDto> getMemberPoint(@PathVariable Long memberId) {
+        Point memberPoint = memberService.findMemberPoint(memberId);
+        PointDto pointDto = PointDto.fromEntity(memberPoint);
+        return ResponseEntity.ok(pointDto);
+    }
+
 }

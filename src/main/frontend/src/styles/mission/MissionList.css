@@ -1152,4 +1152,11 @@
     white-space: nowrap;
     width: 59px;
   }
-  
+
+  .div-2 a {
+    text-decoration: none;
+  }
+
+  .mission-point a {
+    text-decoration: none;
+  }

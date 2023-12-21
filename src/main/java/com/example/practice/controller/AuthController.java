@@ -1,33 +1,18 @@
 package com.example.practice.controller;
 
-import com.amazonaws.Response;
-import com.example.practice.dto.TokenDto;
-import com.example.practice.dto.TokenRequestDto;
+import com.example.practice.dto.token.TokenDto;
+import com.example.practice.dto.token.TokenRequestDto;
 import com.example.practice.dto.member.MemberCreateDto;
 import com.example.practice.dto.member.MemberDto;
 import com.example.practice.dto.member.MemberLoginDto;
-import com.example.practice.entity.Member;
 import com.example.practice.jwt.CustomMemberDetails;
-import com.example.practice.jwt.JwtFilter;
-import com.example.practice.jwt.SecurityUtil;
-import com.example.practice.jwt.TokenProvider;
 import com.example.practice.service.AuthService;
-import com.example.practice.service.CustomUserDetailsService;
-import com.example.practice.service.MemberService;
+import com.example.practice.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.attribute.UserPrincipal;
 
 @RestController
 @RequestMapping("/api/members")

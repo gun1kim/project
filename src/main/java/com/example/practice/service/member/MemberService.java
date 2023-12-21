@@ -1,9 +1,9 @@
-package com.example.practice.service;
+package com.example.practice.service.member;
 
-import com.example.practice.dto.member.MemberDto;
 import com.example.practice.entity.Member;
-import com.example.practice.jwt.SecurityUtil;
-import com.example.practice.repository.MemberRepository;
+import com.example.practice.entity.MemberMission;
+import com.example.practice.entity.Point;
+import com.example.practice.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,19 +26,13 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("no such data"));
     }
 
-//    public MemberDto getMyInfoBySecurity() {
-//        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
-//                .map(MemberDto::fromEntity)
-//                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
-//    }
-
     @Transactional(readOnly = true)
     public Member getMemberById(String id) {
         return memberRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("no such member"));
     }
 
     @Transactional(readOnly = true)
-    public List<Member> getAllMember() {
+    public List<Member> findAllMember() {
         return memberRepository.findAll();
     }
 
@@ -46,14 +40,28 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-
+    @Transactional(readOnly = true)
     public Boolean findIdDuplicateMember(String id) {
         return memberRepository.existsById(id);
     }
 
+    @Transactional(readOnly = true)
     public Boolean findEmailDuplicateMember(String email) {
         return memberRepository.existsMemberByEmail(email);
     }
 
+
+    @Transactional(readOnly = true)
+    public List<MemberMission> findMemberMissions(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("no such member"));
+
+        return member.getMemberMissions();
+    }
+
+    @Transactional(readOnly = true)
+    public Point findMemberPoint(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("no such member"));
+        return member.getPoint();
+    }
 
 }
